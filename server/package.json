@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/app.ts --env-file=.env"
+    "dev": "tsx watch src/app.ts --env-file=.env",
+    "seed": "tsx prisma/seed.ts"
   },
   "keywords": [],
   "author": "",

@@ -24,7 +24,7 @@ model Product {
   description  String?
   slug         String   @unique
   priceInCents Int      @map("price_in_cents")
-  brand        String   @unique
+  brand        String
   categoryId   String   @map("category_id")
   createdAt    DateTime @default(now()) @map("created_at")
 
