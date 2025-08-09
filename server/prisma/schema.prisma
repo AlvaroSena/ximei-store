@@ -9,10 +9,11 @@ datasource db {
 }
 
 model Category {
-  id        String   @id @default(uuid())
+  id        String    @id @default(uuid())
   title     String
-  slug      String   @unique
-  createdAt DateTime @default(now()) @map("created_at")
+  slug      String    @unique
+  products  Product[]
+  createdAt DateTime  @default(now()) @map("created_at")
 
   @@map("categories")
 }
@@ -24,9 +25,11 @@ model Product {
   slug         String   @unique
   priceInCents Int      @map("price_in_cents")
   brand        String   @unique
+  categoryId   String   @map("category_id")
   createdAt    DateTime @default(now()) @map("created_at")
 
-  images ProductImage[]
+  images   ProductImage[]
+  category Category       @relation(fields: [categoryId], references: [id])
 
   @@map("products")
 }
