@@ -1,6 +1,6 @@
 export function ProductCart() {
   return (
-    <div className="max-w-72 text-red-950 font-semibold text-lg">
+    <div className="max-w-72 text-red-900 font-semibold text-lg">
       <img
         src="https://ximei-store.s3.sa-east-1.amazonaws.com/bolsa-1.jpeg"
         alt=""
