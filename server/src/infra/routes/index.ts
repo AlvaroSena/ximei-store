@@ -9,6 +9,7 @@ import { ListProductsController } from "../controllers/list-products-controller"
 import { UpdateProductController } from "../controllers/update-product-controller";
 import { GetProductController } from "../controllers/get-product-controller";
 import { DeleteProductController } from "../controllers/delete-product-controller";
+import { GetProductBySlugController } from "../controllers/get-product-by-slug-controller";
 
 export const routes = Router();
 const createCategoryController = new CreateCategoryController();
@@ -22,6 +23,7 @@ const listProductsController = new ListProductsController();
 const updateProductController = new UpdateProductController();
 const getProductController = new GetProductController();
 const deleteProductController = new DeleteProductController();
+const getProductBySlugController = new GetProductBySlugController();
 
 routes.post("/v1/categories", createCategoryController.handle);
 routes.get("/v1/categories", listCategoriesController.handle);
@@ -34,3 +36,4 @@ routes.get("/v1/products", listProductsController.handle);
 routes.put("/v1/products/update/:id", updateProductController.handle);
 routes.get("/v1/products/:id", getProductController.handle);
 routes.delete("/v1/products/delete/:id", deleteProductController.handle);
+routes.get("/v1/products/q/:slug", getProductBySlugController.handle);
