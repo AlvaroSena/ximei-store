@@ -1,11 +1,37 @@
+import { useQuery } from "@tanstack/react-query";
+import { LoaderCircle } from "lucide-react";
 import { ProductCard } from "../components/product-card";
 import { useIsMobile } from "../hooks/useIsMobile";
+import { getProducts } from "../lib/api";
 
-const allProducts = [...Array(7)];
+// const allProducts = [...Array(7)];
 
 export function Catalog() {
   const isMobile = useIsMobile(768);
-  const productsToShow = isMobile ? allProducts.slice(0, 4) : allProducts;
+  // const productsToShow = isMobile ? allProducts.slice(0, 4) : allProducts;
+
+  const { data, isPending, error } = useQuery({
+    queryKey: ["products"],
+    queryFn: getProducts,
+  });
+
+  if (isPending) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <LoaderCircle className="animate-spin text-red-900 size-10" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <h3 className="text-xl font-semibold text-stone-900">
+          Nenhum produto foi encontrado.
+        </h3>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -19,22 +45,23 @@ export function Catalog() {
 
         <div
           className={`
-          max-w-[1120px]
-          px-4 lg:px-0
-          mx-auto my-8
           ${
             isMobile
               ? "flex overflow-x-auto gap-4 snap-x snap-mandatory"
-              : "grid grid-cols-3 lg:grid-cols-4 gap-4"
+              : "grid grid-cols-3 lg:grid-cols-4 gap-4 my-32"
           }
         `}
         >
-          {productsToShow.map((_, i) => (
+          {data?.products.map((product: any, i: number) => (
             <div
               key={i}
               className={`${isMobile ? "snap-center shrink-0 w-72" : ""}`}
             >
-              <ProductCard />
+              <ProductCard
+                image={product.images[0]?.url}
+                title={product.title}
+                price={product.priceInCents / 1000}
+              />
             </div>
           ))}
         </div>

@@ -1,7 +1,14 @@
 import { useState, useEffect } from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
+import { EmptyImage } from "./empty-imagem";
 
-export function ProductCard() {
+type ProductCardProps = {
+  image: string;
+  title: string;
+  price: number;
+};
+
+export function ProductCard({ image, title, price }: ProductCardProps) {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
@@ -19,11 +26,15 @@ export function ProductCard() {
       className="block w-full max-w-72 text-stone-900 font-semibold text-lg"
     >
       <div className="h-72 w-full relative group">
-        <img
-          src="https://ximei-store.s3.sa-east-1.amazonaws.com/bolsa-1.jpeg"
-          alt=""
-          className="w-full h-full object-cover"
-        />
+        {!image ? (
+          <EmptyImage />
+        ) : (
+          <img
+            src={image}
+            alt="Imagem da Bolsa deste produto"
+            className="w-full h-full object-cover"
+          />
+        )}
 
         {/* Botão com animação de surgimento */}
         <button
@@ -42,8 +53,13 @@ export function ProductCard() {
       </div>
 
       <div className="flex flex-col items-center">
-        <p>Product title</p>
-        <span className="block">R$ 0,00</span>
+        <p>{title}</p>
+        <span className="block">
+          {Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          }).format(price)}
+        </span>
       </div>
     </a>
   );
