@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ShoppingBagIcon,
   MagnifyingGlassIcon,
@@ -13,6 +13,20 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSearchDrawerOpen, setIsSearchDrawerOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <>
@@ -65,10 +79,10 @@ export function Header() {
           </button>
 
           <div
-            className={`fixed left-0 w-full bg-white transform transition-transform duration-300 ease-in-out z-40 md:hidden`}
+            className={`fixed left-0 w-full bg-white border-t border-neutral-200 transform transition-transform duration-300 ease-in-out z-40 md:hidden`}
             style={{
-              top: `96px`,
-              height: `calc(100vh - 96px)`,
+              top: scrolled ? "96px" : `140px`,
+              height: scrolled ? "calc(100vh - 96px)" : `calc(100vh - 140px)`,
               transform: open ? "translateX(0)" : "translateX(-100%)",
             }}
           >
