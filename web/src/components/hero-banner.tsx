@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 export function HeroBanner() {
   const [animate, setAnimate] = useState(true);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // Exemplo breakpoint 768px
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
     const timer = setTimeout(() => setAnimate(false), 2000);
@@ -16,7 +16,6 @@ export function HeroBanner() {
     }
     window.addEventListener("resize", handleResize);
 
-    // Cleanup
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 

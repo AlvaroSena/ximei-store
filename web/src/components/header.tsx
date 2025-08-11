@@ -31,7 +31,7 @@ export function Header() {
               Início
             </a>
             <a
-              href="/"
+              href="/catalog"
               className="relative inline-block
                  before:absolute before:bottom-0 before:left-0 before:h-[1px] before:w-full
                  before:origin-left before:scale-x-0 before:bg-stone-900 before:transition-transform before:duration-270

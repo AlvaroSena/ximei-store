@@ -17,12 +17,12 @@ export function Product() {
         />
       </div>
       <div className="w-full px-4 lg:px-0 flex flex-col gap-5">
-        <h1 className="text-4xl font-bold text-red-900">Titulo do produto</h1>
-        <h3 className="text-3xl font-semibold text-red-900">R$ 320,00</h3>
+        <h1 className="text-4xl font-bold text-stone-900">Titulo do produto</h1>
+        <h3 className="text-3xl font-semibold text-stone-900">R$ 320,00</h3>
 
         <div className="flex flex-row items-center gap-3">
           <div className="size-2 bg-green-500 rounded-full animate-pulse"></div>
-          <p className="font-medium text-red-900">Em estoque</p>
+          <p className="font-medium text-stone-900">Em estoque</p>
         </div>
 
         <QuantityInput />
@@ -36,18 +36,18 @@ export function Product() {
         <Disclosure>
           {({ open }) => (
             <>
-              <DisclosureButton className="flex flex-row items-center justify-between font-medium text-lg text-red-900 py-3">
+              <DisclosureButton className="flex flex-row items-center justify-between font-medium text-lg text-stone-900 py-3">
                 DESCRIÇÃO
                 {open ? (
                   <MinusIcon
-                    className="size-5 text-red-900 transition hover:opacity-50"
+                    className="size-5 text-stone-900 transition hover:opacity-50"
                     style={{
                       animation: open && "top-spin-reverse 0.3s forwards",
                     }}
                   />
                 ) : (
                   <PlusIcon
-                    className="size-5 text-red-900 transition hover:opacity-50"
+                    className="size-5 text-stone-900 transition hover:opacity-50"
                     style={{
                       animation: open
                         ? "bottom-spin 0.3s forwards"
