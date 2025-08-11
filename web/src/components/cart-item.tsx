@@ -1,21 +1,7 @@
-import { TrashIcon, PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { TrashIcon } from "@heroicons/react/24/outline";
+import { CartItemQuantityInput } from "./cart-item-quantity-input";
 
 export function CartItem() {
-  const [quantity, setQuantity] = useState(1);
-
-  function increaseQuantity() {
-    setQuantity(quantity + 1);
-  }
-
-  function decreaseQuantity() {
-    if (quantity === 1) {
-      return;
-    }
-
-    setQuantity(quantity - 1);
-  }
-
   return (
     <div className="flex flex-row items-start justify-between w-full">
       <div className="flex flex-row gap-6">
@@ -29,21 +15,7 @@ export function CartItem() {
             Bolsa
           </a>
           <span className="text-lg text-semibold text-red-950">R$ 100,00</span>
-          <div className="flex flex-row items-center gap-4">
-            <button
-              className="p-3 rounded-full bg-neutral-100 transition hover:bg-neutral-200"
-              onClick={decreaseQuantity}
-            >
-              <MinusIcon className="size-4 text-stone-950 " />
-            </button>
-            <p className="text-stone-950">{quantity}</p>
-            <button
-              className="p-3 rounded-full bg-neutral-100 transition hover:bg-neutral-200"
-              onClick={increaseQuantity}
-            >
-              <PlusIcon className="size-4 text-stone-950 " />
-            </button>
-          </div>
+          <CartItemQuantityInput />
         </div>
       </div>
       <button>
