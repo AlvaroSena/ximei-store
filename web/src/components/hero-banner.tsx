@@ -1,22 +1,14 @@
 import { useEffect, useState } from "react";
+import { useIsMobile } from "../hooks/useIsMobile";
 
 export function HeroBanner() {
   const [animate, setAnimate] = useState(true);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const isMobile = useIsMobile(768);
 
   useEffect(() => {
     const timer = setTimeout(() => setAnimate(false), 2000);
 
     return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    function handleResize() {
-      setIsMobile(window.innerWidth <= 768);
-    }
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (

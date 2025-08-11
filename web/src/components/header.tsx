@@ -7,6 +7,7 @@ import {
 } from "@heroicons/react/24/outline";
 import CartDrawer from "./cart-drawer";
 import SearchDrawer from "./search-drawer";
+import logo from "../assets/logo.png";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -93,8 +94,8 @@ export function Header() {
             </div>
           </div>
 
-          <a href="/" className="block text-5xl text-stone-900">
-            Vega
+          <a href="/" className="block">
+            <img src={logo} alt="Logo Ximei Store" className="w-[72px]" />
           </a>
 
           <div className="flex flex-row items-center gap-5">
