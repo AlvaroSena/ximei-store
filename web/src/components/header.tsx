@@ -5,9 +5,13 @@ import {
   Bars3Icon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import CartDrawer from "./cart-drawer";
+import SearchDrawer from "./search-drawer";
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isSearchDrawerOpen, setIsSearchDrawerOpen] = useState(false);
 
   return (
     <>
@@ -94,13 +98,26 @@ export function Header() {
           </a>
 
           <div className="flex flex-row items-center gap-5">
-            <a href="">
+            <button className="" onClick={() => setIsSearchDrawerOpen(true)}>
               <MagnifyingGlassIcon className="size-6 text-red-900 transition hover:opacity-50" />
-            </a>
-            <a href="" className="">
+            </button>
+            <button className="relative" onClick={() => setIsCartOpen(true)}>
+              <span className="absolute mx-1 my-[-5px] text-white bg-red-900 text-xs py-0.5 px-1.5 rounded-full">
+                1
+              </span>
               <ShoppingBagIcon className="size-6 text-red-900 transition hover:opacity-50" />
-            </a>
+            </button>
           </div>
+
+          <SearchDrawer
+            isOpen={isSearchDrawerOpen}
+            onClose={() => setIsSearchDrawerOpen(false)}
+          />
+
+          <CartDrawer
+            isOpen={isCartOpen}
+            onClose={() => setIsCartOpen(false)}
+          />
         </div>
       </header>
     </>
