@@ -60,6 +60,7 @@ export function Home() {
                 image={product.images[0]?.url}
                 title={product.title}
                 price={product.priceInCents / 1000}
+                slug={product.slug}
               />
             </div>
           ))}

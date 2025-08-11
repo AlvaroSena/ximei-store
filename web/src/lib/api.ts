@@ -14,3 +14,14 @@ export async function getProducts() {
     console.log(err);
   }
 }
+
+export async function getProduct(slug: string) {
+  try {
+    const response = await api.get(`/products/q/${slug}`);
+    const data = response.data;
+
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+}

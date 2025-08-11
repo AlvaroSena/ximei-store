@@ -6,9 +6,10 @@ type ProductCardProps = {
   image: string;
   title: string;
   price: number;
+  slug: string;
 };
 
-export function ProductCard({ image, title, price }: ProductCardProps) {
+export function ProductCard({ image, title, price, slug }: ProductCardProps) {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
@@ -22,7 +23,7 @@ export function ProductCard({ image, title, price }: ProductCardProps) {
 
   return (
     <a
-      href="/product"
+      href={`/${slug}`}
       className="block w-full max-w-72 text-stone-900 font-semibold text-lg"
     >
       <div className="h-72 w-full relative group">

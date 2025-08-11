@@ -5,20 +5,91 @@ import {
   DisclosurePanel,
 } from "@headlessui/react";
 import { QuantityInput } from "../components/quantity-input";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { getProduct } from "../lib/api";
+import { LoaderCircle } from "lucide-react";
+import { useIsMobile } from "../hooks/useIsMobile";
+import Zoom from "react-medium-image-zoom";
 
 export function Product() {
+  const isMobile = useIsMobile(768);
+  const { productSlug } = useParams();
+
+  if (!productSlug) {
+    return;
+  }
+
+  const { data, isPending, error } = useQuery({
+    queryKey: ["product"],
+    queryFn: async () => await getProduct(productSlug),
+  });
+
+  if (isPending) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <LoaderCircle className="animate-spin text-red-900 size-10" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <h3 className="text-xl font-semibold text-stone-900">
+          Produto não foi encontrado.
+        </h3>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-[1120px] mx-auto my-8 flex flex-col md:flex-row gap-8">
-      <div>
-        <img
-          src="https://ximei-store.s3.sa-east-1.amazonaws.com/bolsa-1.jpeg"
-          alt=""
-          className="w-[100%]"
-        />
+      <div
+        className={`
+          ${
+            isMobile
+              ? "flex overflow-x-auto gap-4 snap-x snap-mandatory"
+              : `grid gap-4 ${
+                  data?.product.images.length > 1
+                    ? "grid-cols-2"
+                    : "grid-cols-1"
+                }`
+          }
+        `}
+      >
+        {data?.product.images.map((image: any) => {
+          return (
+            <>
+              {!isMobile ? (
+                <Zoom>
+                  <img
+                    src={image.url}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                </Zoom>
+              ) : (
+                <img
+                  src={image.url}
+                  alt=""
+                  className="w-full h-full object-cover"
+                />
+              )}
+            </>
+          );
+        })}
       </div>
       <div className="w-full px-4 lg:px-0 flex flex-col gap-5">
-        <h1 className="text-4xl font-bold text-stone-900">Titulo do produto</h1>
-        <h3 className="text-3xl font-semibold text-stone-900">R$ 320,00</h3>
+        <h1 className="text-4xl font-bold text-stone-900">
+          {data?.product.title}
+        </h1>
+        <span className="text-3xl font-semibold text-stone-900">
+          {Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          }).format(data?.product.priceInCents / 1000)}
+        </span>
 
         <div className="flex flex-row items-center gap-3">
           <div className="size-2 bg-green-500 rounded-full animate-pulse"></div>
@@ -58,10 +129,7 @@ export function Product() {
               </DisclosureButton>
               {open && (
                 <DisclosurePanel className="text-stone-700 font-medium text-lg">
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  Eaque eius nesciunt maxime repellat labore accusamus eum sunt
-                  nostrum voluptatem quas odio, doloremque illum expedita
-                  impedit nam dolor ullam veritatis tenetur!
+                  {data?.product.description}
                 </DisclosurePanel>
               )}
             </>
