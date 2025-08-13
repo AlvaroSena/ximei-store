@@ -37,7 +37,7 @@ export class UpdateProduct {
       data: {
         title,
         description,
-        priceInCents: price * 1000,
+        priceInCents: price * 100,
         brand,
         slug: slugify(title),
         categoryId,

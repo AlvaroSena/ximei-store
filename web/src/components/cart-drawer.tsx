@@ -9,7 +9,7 @@ type CartDrawerProps = {
 };
 
 export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
-  const { cart } = useContext(ShoppingCartContext);
+  const { cart, finalizeOrder } = useContext(ShoppingCartContext);
   const [cartData, setCartData] = useState<any>([]);
   let total = 0;
 
@@ -99,15 +99,15 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             </div>
 
             <div className="w-full flex flex-row items-center gap-4">
-              <button
+              {/* <button
                 onClick={onClose}
                 className="w-full border border-red-900 px-6 py-4 font-medium text-lg transition hover:bg-red-900 hover:text-white"
               >
                 IR PARA O CARRINHO
-              </button>
+              </button> */}
 
               <button
-                onClick={() => alert("Ir para checkout")}
+                onClick={() => finalizeOrder()}
                 className="w-full bg-red-900 text-white text-lg py-4 px-6 font-medium transition hover:opacity-90"
               >
                 FINALIZAR

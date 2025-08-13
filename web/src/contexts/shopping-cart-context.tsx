@@ -9,6 +9,7 @@ interface ShoppingCartContextProps {
   addToCart: (item: any) => any;
   deleteFromCart: (itemId: string) => void;
   cleanCart: () => void;
+  finalizeOrder: () => void;
   cart: any;
 }
 
@@ -82,9 +83,40 @@ export function ShoppingCartContextProvider({
     setCart([]);
   }
 
+  function finalizeOrder() {
+    let message = "🛒 *Meu Pedido:*\n\n";
+
+    cart.map((cartItem: any) => {
+      return (message += `${cartItem.quantity}x ${
+        cartItem.title
+      } - ${Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(cartItem.priceInCents / 1000)}\n`);
+    });
+
+    let total = cart.reduce(
+      (sum: any, item: any) => sum + item.priceInCents * item.quantity,
+      0
+    );
+
+    message += `\n-------------------------\n💰 *Total:* R$ ${Intl.NumberFormat(
+      "pt-BR",
+      {
+        style: "currency",
+        currency: "BRL",
+      }
+    ).format(total / 1000)}`;
+
+    const url = `https://wa.me/${5511991100912}?text=${encodeURIComponent(
+      message
+    )}`;
+    window.open(url, "_blank");
+  }
+
   return (
     <ShoppingCartContext.Provider
-      value={{ addToCart, deleteFromCart, cleanCart, cart }}
+      value={{ addToCart, deleteFromCart, cleanCart, finalizeOrder, cart }}
     >
       {children}
     </ShoppingCartContext.Provider>
