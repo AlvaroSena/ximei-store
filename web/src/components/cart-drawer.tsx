@@ -77,43 +77,45 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 <p className="text-red-950 font-semibold text-2xl">
                   Seu carrinho está vazio
                 </p>
-                <button
-                  onClick={() => alert("Ir para checkout")}
+                <a
+                  href="/catalog"
                   className=" bg-red-900 text-white text-lg py-4 px-6 font-medium transition hover:opacity-90"
                 >
                   COMEÇAR A COMPRAR
-                </button>
+                </a>
               </div>
             )}
           </main>
 
-          <footer className="border-t border-neutral-200 px-6 py-4">
-            <div className="flex items-center justify-between mb-3">
-              <p className="text-xl text-red-950">Total</p>
-              <p className="text-xl font-semibold text-red-950">
-                {Intl.NumberFormat("pt-BR", {
-                  style: "currency",
-                  currency: "BRL",
-                }).format(total / 100)}
-              </p>
-            </div>
+          {cart.length >= 1 && (
+            <footer className="border-t border-neutral-200 px-6 py-4">
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-xl text-red-950">Total</p>
+                <p className="text-xl font-semibold text-red-950">
+                  {Intl.NumberFormat("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  }).format(total / 100)}
+                </p>
+              </div>
 
-            <div className="w-full flex flex-row items-center gap-4">
-              {/* <button
+              <div className="w-full flex flex-row items-center gap-4">
+                {/* <button
                 onClick={onClose}
                 className="w-full border border-red-900 px-6 py-4 font-medium text-lg transition hover:bg-red-900 hover:text-white"
               >
                 IR PARA O CARRINHO
               </button> */}
 
-              <button
-                onClick={() => finalizeOrder()}
-                className="w-full bg-red-900 text-white text-lg py-4 px-6 font-medium transition hover:opacity-90"
-              >
-                FINALIZAR
-              </button>
-            </div>
-          </footer>
+                <button
+                  onClick={() => finalizeOrder()}
+                  className="w-full bg-red-900 text-white text-lg py-4 px-6 font-medium transition hover:opacity-90"
+                >
+                  FINALIZAR
+                </button>
+              </div>
+            </footer>
+          )}
         </div>
       </aside>
     </div>

@@ -24,14 +24,22 @@ export function HeroBanner() {
     >
       <div className="bg-black/50 absolute inset-0"></div>
 
-      <div className="relative z-10 text-center">
-        <h1 className="text-6xl font-bold">Bem-vindo!</h1>
+      <div className="relative z-10 px-4 text-center max-w-[900px]">
+        <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold">
+          Descubra a Bolsa Perfeita para Cada Estilo
+        </h1>
         <p className="mt-4 text-lg font-medium">
-          Este é o seu hero banner com TailwindCSS
+          Explore nossa coleção exclusiva de bolsas femininas e masculinas:
+          design sofisticado, qualidade premium e tendências que combinam com
+          você. Encontre o modelo ideal para o dia a dia, trabalho ou ocasiões
+          especiais
         </p>
-        <button className="px-6 py-3 border text-lg border-white font-medium transition hover:bg-white hover:text-red-950">
+        <a
+          href="/catalog"
+          className="block my-8 max-w-56 mx-auto px-6 py-3 border text-lg border-white font-medium transition hover:bg-white hover:text-red-950"
+        >
           COMPRAR AGORA
-        </button>
+        </a>
       </div>
     </section>
   );

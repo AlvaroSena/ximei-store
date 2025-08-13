@@ -88,7 +88,7 @@ export function ShoppingCartContextProvider({
   }
 
   function finalizeOrder() {
-    let message = "🛒 *Meu Pedido:*\n\n";
+    let message = "# *Meu Pedido:*\n\n";
 
     cart.map((cartItem: any) => {
       return (message += `${cartItem.quantity}x ${
@@ -104,7 +104,7 @@ export function ShoppingCartContextProvider({
       0
     );
 
-    message += `\n-------------------------\n💰 *Total:* R$ ${Intl.NumberFormat(
+    message += `\n-------------------------\n *Total:* R$ ${Intl.NumberFormat(
       "pt-BR",
       {
         style: "currency",

@@ -44,7 +44,7 @@ export function Catalog() {
           <h3 className="text-3xl font-bold text-stone-900">Produtos</h3>
         </div>
 
-        <div className="my-32">
+        <div className="my-32 px-4 lg:px-0">
           <ProductList data={data} path={location.pathname} />
         </div>
       </div>
