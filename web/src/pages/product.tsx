@@ -107,7 +107,7 @@ export function Product() {
           {Intl.NumberFormat("pt-BR", {
             style: "currency",
             currency: "BRL",
-          }).format(data?.product.priceInCents / 1000)}
+          }).format(data?.product.priceInCents / 100)}
         </span>
 
         <div className="flex flex-row items-center gap-3">

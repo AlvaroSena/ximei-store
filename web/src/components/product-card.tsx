@@ -76,7 +76,7 @@ export function ProductCard({ images, product }: ProductCardProps) {
           {Intl.NumberFormat("pt-BR", {
             style: "currency",
             currency: "BRL",
-          }).format(product.priceInCents / 1000)}
+          }).format(product.priceInCents / 100)}
         </span>
       </div>
     </a>

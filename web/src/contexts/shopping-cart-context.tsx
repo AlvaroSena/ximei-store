@@ -92,7 +92,7 @@ export function ShoppingCartContextProvider({
       } - ${Intl.NumberFormat("pt-BR", {
         style: "currency",
         currency: "BRL",
-      }).format(cartItem.priceInCents / 1000)}\n`);
+      }).format(cartItem.priceInCents / 100)}\n`);
     });
 
     let total = cart.reduce(
@@ -106,7 +106,7 @@ export function ShoppingCartContextProvider({
         style: "currency",
         currency: "BRL",
       }
-    ).format(total / 1000)}`;
+    ).format(total / 100)}`;
 
     const url = `https://wa.me/${5511991100912}?text=${encodeURIComponent(
       message

@@ -66,7 +66,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     id={item.id}
                     imageUrl={item.images[0].url}
                     title={item.title}
-                    price={item.priceInCents / 1000}
+                    price={item.priceInCents / 100}
                     slug={item.slug}
                     quantity={item.quantity}
                   />
@@ -94,7 +94,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 {Intl.NumberFormat("pt-BR", {
                   style: "currency",
                   currency: "BRL",
-                }).format(total / 1000)}
+                }).format(total / 100)}
               </p>
             </div>
 

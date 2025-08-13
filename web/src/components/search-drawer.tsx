@@ -116,7 +116,7 @@ export default function SearchDrawer({ isOpen, onClose }: SearchDrawerProps) {
                             {Intl.NumberFormat("pt-BR", {
                               style: "currency",
                               currency: "BRL",
-                            }).format(product.priceInCents / 1000)}
+                            }).format(product.priceInCents / 100)}
                           </span>
                         </div>
                       </a>
