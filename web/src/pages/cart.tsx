@@ -42,7 +42,7 @@ export function Cart() {
             <button>
               <TrashIcon className="size-6 transition text-neutral-400 hover:text-red-950" />
             </button>
-            <CartItemQuantityInput />
+            {/* <CartItemQuantityInput /> */}
           </div>
         </div>
 
