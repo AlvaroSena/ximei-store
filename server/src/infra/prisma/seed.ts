@@ -1,7 +1,7 @@
 import { prisma } from ".";
 
 // prisma/seed.ts
-async function main() {
+export async function main() {
   const categoryId = "1affc447-ed83-4b62-bb4c-0af625f5022d";
 
   // Lista de nomes diferentes para bolsas (sem números)
