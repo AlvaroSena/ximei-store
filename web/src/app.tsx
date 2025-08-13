@@ -1,18 +1,21 @@
-import { QueryClientProvider } from "@tanstack/react-query";
+import "react-medium-image-zoom/dist/styles.css";
 import { AppRoutes } from "./app-routes";
+import { Toaster } from "sonner";
 import { Footer } from "./components/footer";
 import { Header } from "./components/header";
 import { queryClient } from "./lib/query-client";
-import "react-medium-image-zoom/dist/styles.css";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { ShoppingCartContextProvider } from "./contexts/shopping-cart-context";
 
 export function App() {
   return (
-    <>
-      <Header />
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <ShoppingCartContextProvider>
+        <Header />
         <AppRoutes />
-      </QueryClientProvider>
-      <Footer />
-    </>
+        <Toaster richColors closeButton />
+        <Footer />
+      </ShoppingCartContextProvider>
+    </QueryClientProvider>
   );
 }

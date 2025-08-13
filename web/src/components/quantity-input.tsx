@@ -1,21 +1,17 @@
 import { useState } from "react";
 import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
 
-export function QuantityInput() {
-  const [quantity, setQuantity] = useState(1);
+interface QuantityInputProps {
+  quantity: number;
+  increaseQuantity: () => void;
+  decreaseQuantity: () => void;
+}
 
-  function increaseQuantity() {
-    setQuantity(quantity + 1);
-  }
-
-  function decreaseQuantity() {
-    if (quantity === 1) {
-      return;
-    }
-
-    setQuantity(quantity - 1);
-  }
-
+export function QuantityInput({
+  quantity,
+  increaseQuantity,
+  decreaseQuantity,
+}: QuantityInputProps) {
   return (
     <div className="flex flex-row items-center justify-between">
       <p className="font-medium text-stone-900">Quantidade</p>

@@ -1,8 +1,14 @@
 import { useState } from "react";
 import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
 
-export function CartItemQuantityInput() {
-  const [quantity, setQuantity] = useState(1);
+interface CartItemQuantityInputProps {
+  itemQuantity: number;
+}
+
+export function CartItemQuantityInput({
+  itemQuantity,
+}: CartItemQuantityInputProps) {
+  const [quantity, setQuantity] = useState(itemQuantity);
 
   function increaseQuantity() {
     setQuantity(quantity + 1);

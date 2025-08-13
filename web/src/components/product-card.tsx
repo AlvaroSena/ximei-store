@@ -1,12 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { EmptyImage } from "./empty-imagem";
+import { ShoppingCartContext } from "../contexts/shopping-cart-context";
 
 type ProductCardProps = {
   images: Image[];
-  title: string;
-  price: number;
-  slug: string;
+  product: any;
 };
 
 type Image = {
@@ -14,9 +13,10 @@ type Image = {
   url: string;
 };
 
-export function ProductCard({ images, title, price, slug }: ProductCardProps) {
+export function ProductCard({ images, product }: ProductCardProps) {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [currentImage, setCurrentImage] = useState(images[0]?.url);
+  const { addToCart } = useContext(ShoppingCartContext);
 
   useEffect(() => {
     function handleResize() {
@@ -29,7 +29,7 @@ export function ProductCard({ images, title, price, slug }: ProductCardProps) {
 
   return (
     <a
-      href={`/${slug}`}
+      href={`/${product.slug}`}
       className="block w-full max-w-72 text-stone-900 font-semibold text-lg"
     >
       <div className="h-72 w-full relative group">
@@ -54,6 +54,13 @@ export function ProductCard({ images, title, price, slug }: ProductCardProps) {
               ? "w-auto"
               : "w-full opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 absolute bottom-0 transition-all duration-300 ease-out"
           }`}
+          onClick={() =>
+            addToCart({
+              ...product,
+              quantity: 1,
+              totalPriceInCents: product.priceInCents * 1,
+            })
+          }
         >
           {isMobile ? (
             <PlusIcon className="size-5 text-white" />
@@ -64,12 +71,12 @@ export function ProductCard({ images, title, price, slug }: ProductCardProps) {
       </div>
 
       <div className="flex flex-col items-center">
-        <p>{title}</p>
+        <p>{product.title}</p>
         <span className="block">
           {Intl.NumberFormat("pt-BR", {
             style: "currency",
             currency: "BRL",
-          }).format(price)}
+          }).format(product.priceInCents / 1000)}
         </span>
       </div>
     </a>

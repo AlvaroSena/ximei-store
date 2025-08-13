@@ -44,11 +44,11 @@ export function Catalog() {
         </div>
 
         <div
-          className={`
+          className={`my-32
           ${
             isMobile
-              ? "flex overflow-x-auto gap-4 snap-x snap-mandatory"
-              : "grid grid-cols-3 lg:grid-cols-4 gap-4 my-32"
+              ? "flex overflow-x-auto gap-4 snap-x snap-mandatory px-4"
+              : "grid grid-cols-3 lg:grid-cols-4 gap-4 px-0"
           }
         `}
         >
@@ -57,12 +57,7 @@ export function Catalog() {
               key={i}
               className={`${isMobile ? "snap-center shrink-0 w-72" : ""}`}
             >
-              <ProductCard
-                images={product.images}
-                title={product.title}
-                price={product.priceInCents / 1000}
-                slug={product.slug}
-              />
+              <ProductCard images={product.images} product={product} />
             </div>
           ))}
         </div>

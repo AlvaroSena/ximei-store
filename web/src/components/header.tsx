@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   ShoppingBagIcon,
   MagnifyingGlassIcon,
@@ -8,12 +8,15 @@ import {
 import CartDrawer from "./cart-drawer";
 import SearchDrawer from "./search-drawer";
 import logo from "../assets/logo.png";
+import { ShoppingCartContext } from "../contexts/shopping-cart-context";
 
 export function Header() {
   const [open, setOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSearchDrawerOpen, setIsSearchDrawerOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { cart } = useContext(ShoppingCartContext);
+  let totalCartQuantity = 0;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,6 +30,10 @@ export function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  for (const item of cart) {
+    totalCartQuantity += item.quantity;
+  }
 
   return (
     <>
@@ -117,9 +124,11 @@ export function Header() {
               <MagnifyingGlassIcon className="size-6 text-stone-900 transition hover:opacity-50" />
             </button>
             <button className="relative" onClick={() => setIsCartOpen(true)}>
-              <span className="absolute mx-1 my-[-5px] text-white bg-red-900 text-xs py-0.5 px-1.5 rounded-full">
-                1
-              </span>
+              {cart.length >= 1 && (
+                <span className="absolute mx-1 my-[-5px] text-white bg-red-900 text-xs py-0.5 px-1.5 rounded-full">
+                  {totalCartQuantity}
+                </span>
+              )}
               <ShoppingBagIcon className="size-6 stone-red-900 transition hover:opacity-50" />
             </button>
           </div>

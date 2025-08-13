@@ -1,3 +1,4 @@
+import { useContext, useState } from "react";
 import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
 import {
   Disclosure,
@@ -10,11 +11,15 @@ import { useQuery } from "@tanstack/react-query";
 import { getProduct } from "../lib/api";
 import { LoaderCircle } from "lucide-react";
 import { useIsMobile } from "../hooks/useIsMobile";
+import { ShoppingCartContext } from "../contexts/shopping-cart-context";
 import Zoom from "react-medium-image-zoom";
 
 export function Product() {
   const isMobile = useIsMobile(768);
   const { productSlug } = useParams();
+  const { addToCart } = useContext(ShoppingCartContext);
+
+  const [quantity, setQuantity] = useState(1);
 
   if (!productSlug) {
     return;
@@ -24,6 +29,18 @@ export function Product() {
     queryKey: ["product"],
     queryFn: async () => await getProduct(productSlug),
   });
+
+  function increaseQuantity() {
+    setQuantity(quantity + 1);
+  }
+
+  function decreaseQuantity() {
+    if (quantity === 1) {
+      return;
+    }
+
+    setQuantity(quantity - 1);
+  }
 
   if (isPending) {
     return (
@@ -64,6 +81,7 @@ export function Product() {
               {!isMobile ? (
                 <Zoom>
                   <img
+                    key={image.id}
                     src={image.url}
                     alt=""
                     className="w-full h-full object-cover"
@@ -71,6 +89,7 @@ export function Product() {
                 </Zoom>
               ) : (
                 <img
+                  key={image.id}
                   src={image.url}
                   alt=""
                   className="w-full h-full object-cover"
@@ -96,9 +115,22 @@ export function Product() {
           <p className="font-medium text-stone-900">Em estoque</p>
         </div>
 
-        <QuantityInput />
+        <QuantityInput
+          quantity={quantity}
+          increaseQuantity={increaseQuantity}
+          decreaseQuantity={decreaseQuantity}
+        />
 
-        <button className="py-3 px-4 font-semibold text-white bg-red-900 text-xl w-full transition hover:opacity-80">
+        <button
+          className="py-3 px-4 font-semibold text-white bg-red-900 text-xl w-full transition hover:opacity-80"
+          onClick={() =>
+            addToCart({
+              ...data?.product,
+              quantity,
+              totalPriceInCents: data?.product.priceInCents * quantity,
+            })
+          }
+        >
           Adicionar ao carrinho
         </button>
 

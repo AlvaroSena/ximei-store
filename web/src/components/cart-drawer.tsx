@@ -1,25 +1,25 @@
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { CartItem } from "./cart-item";
-
-type CartItem = {
-  id: string;
-  name: string;
-  price: number;
-  quantity?: number;
-};
+import { useContext, useEffect, useState } from "react";
+import { ShoppingCartContext } from "../contexts/shopping-cart-context";
 
 type CartDrawerProps = {
   isOpen: boolean;
   onClose: () => void;
-  items?: CartItem[];
 };
 
-export default function CartDrawer({
-  isOpen,
-  onClose,
-  items = [],
-}: CartDrawerProps) {
-  const total = items.reduce((s, it) => s + it.price * (it.quantity ?? 1), 0);
+export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
+  const { cart } = useContext(ShoppingCartContext);
+  const [cartData, setCartData] = useState<any>([]);
+  let total = 0;
+
+  for (const item of cart) {
+    total += item.totalPriceInCents;
+  }
+
+  useEffect(() => {
+    setCartData(cart);
+  }, [cart]);
 
   return (
     <div
@@ -58,7 +58,22 @@ export default function CartDrawer({
           </header>
 
           <main className="flex-1 overflow-auto px-6 py-4">
-            {/* <div className="flex flex-col h-full items-center justify-center gap-4">
+            {cartData.length >= 1 ? (
+              cartData?.map((item: any) => {
+                return (
+                  <CartItem
+                    key={item.id}
+                    id={item.id}
+                    imageUrl={item.images[0].url}
+                    title={item.title}
+                    price={item.priceInCents / 1000}
+                    slug={item.slug}
+                    quantity={item.quantity}
+                  />
+                );
+              })
+            ) : (
+              <div className="flex flex-col h-full items-center justify-center gap-4">
                 <p className="text-red-950 font-semibold text-2xl">
                   Seu carrinho está vazio
                 </p>
@@ -68,17 +83,18 @@ export default function CartDrawer({
                 >
                   COMEÇAR A COMPRAR
                 </button>
-              </div> */}
-            <CartItem />
-            <div className="w-full h-[1px] my-6 bg-stone-200"></div>
-            <CartItem />
+              </div>
+            )}
           </main>
 
           <footer className="border-t border-neutral-200 px-6 py-4">
             <div className="flex items-center justify-between mb-3">
               <p className="text-xl text-red-950">Total</p>
               <p className="text-xl font-semibold text-red-950">
-                R$ {total.toFixed(2)} BRL
+                {Intl.NumberFormat("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                }).format(total / 1000)}
               </p>
             </div>
 
