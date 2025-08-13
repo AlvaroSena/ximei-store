@@ -10,6 +10,7 @@ import { UpdateProductController } from "../controllers/update-product-controlle
 import { GetProductController } from "../controllers/get-product-controller";
 import { DeleteProductController } from "../controllers/delete-product-controller";
 import { GetProductBySlugController } from "../controllers/get-product-by-slug-controller";
+import { SearchProductController } from "../controllers/search-product-controller";
 
 export const routes = Router();
 const createCategoryController = new CreateCategoryController();
@@ -24,6 +25,7 @@ const updateProductController = new UpdateProductController();
 const getProductController = new GetProductController();
 const deleteProductController = new DeleteProductController();
 const getProductBySlugController = new GetProductBySlugController();
+const searchProductController = new SearchProductController();
 
 routes.post("/v1/categories", createCategoryController.handle);
 routes.get("/v1/categories", listCategoriesController.handle);
@@ -37,3 +39,4 @@ routes.put("/v1/products/update/:id", updateProductController.handle);
 routes.get("/v1/products/:id", getProductController.handle);
 routes.delete("/v1/products/delete/:id", deleteProductController.handle);
 routes.get("/v1/products/q/:slug", getProductBySlugController.handle);
+routes.get("/v1/products/search/filter", searchProductController.handle);

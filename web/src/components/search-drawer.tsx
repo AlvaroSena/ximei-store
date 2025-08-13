@@ -1,4 +1,10 @@
+import React from "react";
 import { XMarkIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { searchProducts } from "../lib/api";
+import { EmptyImage } from "./empty-imagem";
+import { LoaderCircle } from "lucide-react";
 
 type SearchDrawerProps = {
   isOpen: boolean;
@@ -6,6 +12,23 @@ type SearchDrawerProps = {
 };
 
 export default function SearchDrawer({ isOpen, onClose }: SearchDrawerProps) {
+  const [query, setQuery] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(query);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  const { data, isFetching } = useQuery({
+    queryKey: ["filteredProducts", debouncedSearch],
+    queryFn: async () => await searchProducts(debouncedSearch),
+    enabled: !!debouncedSearch,
+  });
+
   return (
     <div
       aria-hidden={!isOpen}
@@ -48,8 +71,59 @@ export default function SearchDrawer({ isOpen, onClose }: SearchDrawerProps) {
                 type="text"
                 placeholder="O que você está procurando?"
                 className=" outline-none w-full placeholder-neutral-400 text-stone-900"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
               />
               <MagnifyingGlassIcon className="size-6 text-zinc-900" />
+            </div>
+            <div className="my-5 flex flex-col gap-5">
+              {data?.products && (
+                <span className="block text-sm text-stone-500 font-normal">
+                  Resultados: {data?.products.length} achado(s)
+                </span>
+              )}
+
+              {isFetching ? (
+                <div className="flex items-center justify-center h-screen">
+                  <LoaderCircle className="animate-spin text-red-900 size-10" />
+                </div>
+              ) : (
+                <React.Fragment>
+                  {data?.products.map((product: any) => {
+                    return (
+                      <a
+                        key={product.id}
+                        href={`/${product.slug}`}
+                        className="flex flex-row gap-5"
+                      >
+                        {product.images.length >= 1 ? (
+                          <img
+                            src={product.images[0].url}
+                            alt={product.title}
+                            className="size-36 object-cover"
+                          />
+                        ) : (
+                          <div className="size-36">
+                            <EmptyImage />
+                          </div>
+                        )}
+
+                        <div className="flex flex-col gap-3">
+                          <p className="font-semibold w-48 truncate">
+                            {product.title}
+                          </p>
+                          <span className="block text-sm text-stone-900">
+                            {Intl.NumberFormat("pt-BR", {
+                              style: "currency",
+                              currency: "BRL",
+                            }).format(product.priceInCents / 1000)}
+                          </span>
+                        </div>
+                      </a>
+                    );
+                  })}
+                </React.Fragment>
+              )}
             </div>
           </main>
         </div>

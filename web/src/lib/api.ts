@@ -25,3 +25,14 @@ export async function getProduct(slug: string) {
     console.log(err);
   }
 }
+
+export async function searchProducts(query: string) {
+  try {
+    const response = await api.get(`/products/search/filter?q=${query}`);
+    const data = response.data;
+
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+}
