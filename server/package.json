@@ -4,9 +4,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/app.ts --env-file=.env",
-    "start": "node dist/app.js",
-    "build": "npx tsc && npx prisma generate",
-    "seed": "tsx prisma/seed.ts"
+    "start": "tsx src/app.ts",
+    "build": "npx prisma generate",
+    "seed": "tsx src/infra/prisma/seed.ts"
   },
   "keywords": [],
   "author": "",
