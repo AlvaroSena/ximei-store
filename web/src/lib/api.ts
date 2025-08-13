@@ -4,9 +4,9 @@ export const api = axios.create({
   baseURL: "http://localhost:8080/v1",
 });
 
-export async function getProducts() {
+export async function getProducts(page: number, perPage: number) {
   try {
-    const response = await api.get("/products");
+    const response = await api.get(`/products?page=${page}&perPage=${perPage}`);
     const data = response.data;
 
     return data;

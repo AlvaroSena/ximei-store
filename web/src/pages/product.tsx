@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
 import {
   Disclosure,
@@ -6,13 +6,13 @@ import {
   DisclosurePanel,
 } from "@headlessui/react";
 import { QuantityInput } from "../components/quantity-input";
-import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { getProduct } from "../lib/api";
 import { LoaderCircle } from "lucide-react";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { ShoppingCartContext } from "../contexts/shopping-cart-context";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import Zoom from "react-medium-image-zoom";
+import { getProduct } from "../lib/api";
 
 export function Product() {
   const isMobile = useIsMobile(768);
@@ -77,7 +77,7 @@ export function Product() {
       >
         {data?.product.images.map((image: any) => {
           return (
-            <>
+            <React.Fragment key={image.id}>
               {!isMobile ? (
                 <Zoom>
                   <img
@@ -95,7 +95,7 @@ export function Product() {
                   className="w-full h-full object-cover"
                 />
               )}
-            </>
+            </React.Fragment>
           );
         })}
       </div>
@@ -138,7 +138,7 @@ export function Product() {
 
         <Disclosure>
           {({ open }) => (
-            <>
+            <React.Fragment>
               <DisclosureButton className="flex flex-row items-center justify-between font-medium text-lg text-stone-900 py-3">
                 DESCRIÇÃO
                 {open ? (
@@ -164,7 +164,7 @@ export function Product() {
                   {data?.product.description}
                 </DisclosurePanel>
               )}
-            </>
+            </React.Fragment>
           )}
         </Disclosure>
 

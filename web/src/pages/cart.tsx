@@ -1,4 +1,3 @@
-import { CartItemQuantityInput } from "../components/cart-item-quantity-input";
 import { TrashIcon, PencilIcon } from "@heroicons/react/24/outline";
 import {
   Disclosure,
