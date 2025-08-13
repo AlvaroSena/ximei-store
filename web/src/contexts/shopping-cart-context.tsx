@@ -60,17 +60,21 @@ export function ShoppingCartContextProvider({
   function deleteFromCart(itemId: string) {
     const item = cart.find((cartItem: any) => cartItem.id === itemId);
 
-    if (!item) {
+    if (item === null) {
       console.error("Item not found");
       return;
     }
+
+    console.log(item.id);
 
     const itemIndex = cart.findIndex(
       (cartItem: any) => cartItem.id === item.id
     );
 
-    if (!itemIndex) {
-      console.error("Item not found");
+    console.log(itemIndex);
+
+    if (itemIndex === null) {
+      console.error("Item idx not found");
       return;
     }
 
