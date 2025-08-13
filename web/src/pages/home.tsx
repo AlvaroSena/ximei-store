@@ -57,7 +57,7 @@ export function Home() {
               className={`${isMobile ? "snap-center shrink-0 w-72" : ""}`}
             >
               <ProductCard
-                image={product.images[0]?.url}
+                images={product.images}
                 title={product.title}
                 price={product.priceInCents / 1000}
                 slug={product.slug}

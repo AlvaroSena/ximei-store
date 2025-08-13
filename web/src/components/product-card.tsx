@@ -3,14 +3,20 @@ import { PlusIcon } from "@heroicons/react/24/outline";
 import { EmptyImage } from "./empty-imagem";
 
 type ProductCardProps = {
-  image: string;
+  images: Image[];
   title: string;
   price: number;
   slug: string;
 };
 
-export function ProductCard({ image, title, price, slug }: ProductCardProps) {
+type Image = {
+  id: string;
+  url: string;
+};
+
+export function ProductCard({ images, title, price, slug }: ProductCardProps) {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [currentImage, setCurrentImage] = useState(images[0]?.url);
 
   useEffect(() => {
     function handleResize() {
@@ -27,13 +33,17 @@ export function ProductCard({ image, title, price, slug }: ProductCardProps) {
       className="block w-full max-w-72 text-stone-900 font-semibold text-lg"
     >
       <div className="h-72 w-full relative group">
-        {!image ? (
+        {!currentImage ? (
           <EmptyImage />
         ) : (
           <img
-            src={image}
+            src={currentImage}
             alt="Imagem da Bolsa deste produto"
             className="w-full h-full object-cover"
+            onMouseEnter={() =>
+              images.length > 1 && setCurrentImage(images[1].url)
+            }
+            onMouseLeave={() => setCurrentImage(images[0].url)}
           />
         )}
 
