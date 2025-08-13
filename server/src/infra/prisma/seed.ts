@@ -1,8 +1,6 @@
+import { prisma } from ".";
+
 // prisma/seed.ts
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
-
 async function main() {
   const categoryId = "1affc447-ed83-4b62-bb4c-0af625f5022d";
 
