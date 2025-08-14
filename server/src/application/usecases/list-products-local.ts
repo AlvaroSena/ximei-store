@@ -1,12 +1,12 @@
 import { prisma } from "../../infra/prisma";
-import redis from "../../infra/redis";
+import redis from "../../infra/redis/local";
 
 interface ListProductsRequest {
   page: number;
   perPage: number;
 }
 
-export class ListProducts {
+export class ListProductsLocal {
   async execute({ page, perPage }: ListProductsRequest) {
     const skip = (page - 1) * perPage;
     const take = perPage;
@@ -18,7 +18,8 @@ export class ListProducts {
     const cachedProducts = await redis.get(cacheKey);
 
     if (cachedProducts) {
-      return cachedProducts;
+      console.log("DEV: cache hit");
+      return JSON.parse(cachedProducts);
     }
 
     const [products, totalProducts] = await Promise.all([
@@ -41,7 +42,9 @@ export class ListProducts {
       currentPage: page,
     };
 
-    await redis.set(cacheKey, JSON.stringify(result), { ex: 24 * 60 * 60 }); // 24 hour
+    await redis.setEx(cacheKey, 24 * 60 * 60, JSON.stringify(result)); // 24 hour
+
+    console.log("DEV: not cache");
 
     return result;
   }

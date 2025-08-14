@@ -13,7 +13,7 @@ export function Catalog() {
 
   const { data, isPending, error } = useQuery({
     queryKey: ["products"],
-    queryFn: async () => await getProducts(parseInt(page), 25),
+    queryFn: async () => await getProducts(parseInt(page || "1"), 25),
   });
 
   if (isPending) {
