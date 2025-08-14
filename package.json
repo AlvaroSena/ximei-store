@@ -1,0 +1,22 @@
+{
+  "name": "ximei-store",
+  "version": "1.0.0",
+  "description": "Aplicação fullstack para gerenciamento e exibição de um catálogo de produtos, construída com **Node.js**, **TypeScript** e **React** em um monorepo.",
+  "main": "index.js",
+  "scripts": {
+    "install": "npm run install:server && npm run install:web",
+    "install:server": "npm install --prefix server",
+    "install:web": "npm install --prefix web"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlvaroSena/ximei-store.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlvaroSena/ximei-store/issues"
+  },
+  "homepage": "https://github.com/AlvaroSena/ximei-store#readme"
+}
