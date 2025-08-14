@@ -1,23 +1,23 @@
-import { Request, Response } from "express";
-import { ResourceNotFoundError } from "../../application/errors/resource-not-found-error";
+import { Request, Response, NextFunction } from "express";
 import { GetProductBySlug } from "../../application/usecases/get-product-by-slug";
+import { z } from "zod";
 
 export class GetProductBySlugController {
-  async handle(request: Request, reply: Response) {
+  async handle(request: Request, reply: Response, next: NextFunction) {
+    const getProductBySlugRequestParams = z.object({
+      slug: z.string(),
+    });
+
     try {
-      const { slug } = request.params;
+      const { slug } = getProductBySlugRequestParams.parse(request.params);
 
       const getProduct = new GetProductBySlug();
 
       const product = await getProduct.execute({ slug });
 
-      reply.json(product);
+      return reply.json(product);
     } catch (err) {
-      if (err instanceof ResourceNotFoundError) {
-        reply.status(404).json({ message: err.message });
-      }
-
-      console.log(err);
+      next(err);
     }
   }
 }

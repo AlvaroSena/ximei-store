@@ -1,9 +1,10 @@
-import express from "express";
+import express, { type Application } from "express";
 import cors from "cors";
 import { routes } from "./infra/routes";
 import { prisma } from "./infra/prisma";
+import { errorHandler } from "./infra/middlewares/error-handler";
 
-const app = express();
+const app: Application = express();
 app.use(cors());
 app.use(express.json());
 app.use(routes);
@@ -116,6 +117,8 @@ app.post("/seed", async (req, res) => {
     res.status(500).json({ error: "Erro no seed", details: err });
   }
 });
+
+app.use(errorHandler);
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {

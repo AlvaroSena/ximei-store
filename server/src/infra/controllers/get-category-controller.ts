@@ -1,23 +1,23 @@
-import { Request, Response } from "express";
-import { ResourceNotFoundError } from "../../application/errors/resource-not-found-error";
+import { Request, Response, NextFunction } from "express";
 import { GetCategory } from "../../application/usecases/get-category";
+import { z } from "zod";
 
 export class GetCategoryController {
-  async handle(request: Request, reply: Response) {
+  async handle(request: Request, reply: Response, next: NextFunction) {
+    const getCategoryRequestParams = z.object({
+      id: z.uuid(),
+    });
+
     try {
-      const { id } = request.params;
+      const { id } = getCategoryRequestParams.parse(request.params);
 
       const getCategory = new GetCategory();
 
       const category = await getCategory.execute({ id });
 
-      reply.json(category);
+      return reply.json(category);
     } catch (err) {
-      if (err instanceof ResourceNotFoundError) {
-        reply.status(404).json({ message: err.message });
-      }
-
-      console.log(err);
+      next(err);
     }
   }
 }

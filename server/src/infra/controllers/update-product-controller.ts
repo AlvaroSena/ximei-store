@@ -1,12 +1,25 @@
-import { Request, Response } from "express";
-import { ResourceNotFoundError } from "../../application/errors/resource-not-found-error";
+import { Request, Response, NextFunction } from "express";
 import { UpdateProduct } from "../../application/usecases/update-product";
+import { z } from "zod";
 
 export class UpdateProductController {
-  async handle(request: Request, reply: Response) {
+  async handle(request: Request, reply: Response, next: NextFunction) {
+    const updateProductRequestParams = z.object({
+      id: z.uuid(),
+    });
+
+    const updateProductRequestBody = z.object({
+      title: z.string(),
+      description: z.string(),
+      price: z.number(),
+      brand: z.string(),
+      categoryId: z.string(),
+    });
+
     try {
-      const { id } = request.params;
-      const { title, description, price, brand, categoryId } = request.body;
+      const { id } = updateProductRequestParams.parse(request.params);
+      const { title, description, price, brand, categoryId } =
+        updateProductRequestBody.parse(request.body);
 
       const updateProduct = new UpdateProduct();
 
@@ -19,13 +32,9 @@ export class UpdateProductController {
         categoryId,
       });
 
-      reply.status(204).send();
+      return reply.status(204).send();
     } catch (err) {
-      if (err instanceof ResourceNotFoundError) {
-        reply.status(404).json({ message: err.message });
-      }
-
-      console.log(err);
+      next(err);
     }
   }
 }

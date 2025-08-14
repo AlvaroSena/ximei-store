@@ -1,11 +1,20 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { CreateProduct } from "../../application/usecases/create-product";
-import { ResourceNotFoundError } from "../../application/errors/resource-not-found-error";
+import { z } from "zod";
 
 export class CreateProductController {
-  async handle(request: Request, reply: Response) {
+  async handle(request: Request, reply: Response, next: NextFunction) {
+    const createProductRequestBody = z.object({
+      title: z.string(),
+      description: z.string(),
+      price: z.number(),
+      brand: z.string(),
+      categoryId: z.uuid(),
+    });
+
     try {
-      const { title, description, price, brand, categoryId } = request.body;
+      const { title, description, price, brand, categoryId } =
+        createProductRequestBody.parse(request.body);
 
       const createProduct = new CreateProduct();
 
@@ -17,13 +26,9 @@ export class CreateProductController {
         categoryId,
       });
 
-      reply.status(201).send();
+      return reply.status(201).send();
     } catch (err) {
-      if (err instanceof ResourceNotFoundError) {
-        reply.status(404).json({ message: err.message });
-      }
-
-      console.log(err);
+      next(err);
     }
   }
 }

@@ -13,6 +13,7 @@ import { GetProductBySlugController } from "../controllers/get-product-by-slug-c
 import { SearchProductController } from "../controllers/search-product-controller";
 
 export const routes = Router();
+
 const createCategoryController = new CreateCategoryController();
 const listCategoriesController = new ListCategoriesController();
 const updateCategoryController = new UpdateCategoryController();
