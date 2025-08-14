@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { ListProducts } from "../../application/usecases/list-products";
 import { ListProductsLocal } from "../../application/usecases/list-products-local";
 
 export class ListProductsController {
-  async handle(request: Request, reply: Response) {
+  async handle(request: Request, reply: Response, next: NextFunction) {
     try {
       const page = parseInt(request.query.page as string) || 1;
       const perPage = parseInt(request.query.perPage as string) || 10;
@@ -20,7 +20,7 @@ export class ListProductsController {
 
       return reply.json(products);
     } catch (err) {
-      console.log(err);
+      next(err);
     }
   }
 }

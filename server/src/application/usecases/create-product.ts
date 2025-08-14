@@ -1,5 +1,6 @@
 import { prisma } from "../../infra/prisma";
 import { slugify } from "../../utils/slugify";
+import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 
 interface CreateProductRequest {
   title: string;
@@ -24,7 +25,7 @@ export class CreateProduct {
     });
 
     if (!category) {
-      throw new Error("Category not found");
+      throw new ResourceNotFoundError("Category not found");
     }
 
     await prisma.product.create({
