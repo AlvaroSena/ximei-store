@@ -22,8 +22,10 @@
   },
   "dependencies": {
     "@prisma/client": "^6.13.0",
+    "@upstash/redis": "^1.35.3",
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "multer": "^2.0.2"
+    "multer": "^2.0.2",
+    "redis": "^5.8.1"
   }
 }
