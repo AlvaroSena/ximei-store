@@ -66,7 +66,7 @@ export function Header() {
           <button className="md:hidden" onClick={() => setOpen(!open)}>
             {open ? (
               <XMarkIcon
-                className={`size-9 text-red-900 transition hover:opacity-50`}
+                className={`size-9 text-stone-900 transition hover:opacity-50`}
                 style={{
                   animation: open
                     ? "top-spin 0.3s forwards"
@@ -75,7 +75,7 @@ export function Header() {
               />
             ) : (
               <Bars3Icon
-                className={`size-9 text-red-900 transition hover:opacity-50`}
+                className={`size-9 text-stone-900 transition hover:opacity-50`}
                 style={{
                   animation: open
                     ? "bottom-spin 0.3s forwards"
