@@ -13,6 +13,7 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import Zoom from "react-medium-image-zoom";
 import { getProduct } from "../lib/api";
+import type { Image } from "../types/image";
 
 export function Product() {
   const isMobile = useIsMobile(768);
@@ -75,7 +76,7 @@ export function Product() {
           }
         `}
       >
-        {data?.product.images.map((image: any) => {
+        {data?.product.images.map((image: Image) => {
           return (
             <React.Fragment key={image.id}>
               {!isMobile ? (

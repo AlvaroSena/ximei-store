@@ -1,7 +1,8 @@
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { CartItem } from "./cart-item";
 import { useContext, useEffect, useState } from "react";
 import { ShoppingCartContext } from "../contexts/shopping-cart-context";
+import type { CartItem as CartItemType } from "../types/cart-item";
+import { CartItem } from "./cart-item";
 
 type CartDrawerProps = {
   isOpen: boolean;
@@ -59,7 +60,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
           <main className="flex-1 overflow-auto px-6 py-4">
             {cartData.length >= 1 ? (
-              cartData?.map((item: any) => {
+              cartData?.map((item: CartItemType) => {
                 return (
                   <CartItem
                     key={item.id}

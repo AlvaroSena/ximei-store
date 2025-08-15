@@ -2,15 +2,12 @@ import { useState, useEffect, useContext } from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { EmptyImage } from "./empty-imagem";
 import { ShoppingCartContext } from "../contexts/shopping-cart-context";
+import type { Product } from "../types/product";
+import type { Image } from "../types/image";
 
 type ProductCardProps = {
   images: Image[];
-  product: any;
-};
-
-type Image = {
-  id: string;
-  url: string;
+  product: Product;
 };
 
 export function ProductCard({ images, product }: ProductCardProps) {
