@@ -1,8 +1,14 @@
 import { useIsMobile } from "../hooks/useIsMobile";
+import type { Product } from "../types/product";
 import { ProductCard } from "./product-card";
 
 interface ProductListProps {
-  data: any;
+  data: {
+    products: Product[];
+    totalProducts: number;
+    totalPages: number;
+    currentPage: number;
+  };
   path: string;
 }
 
@@ -20,7 +26,7 @@ export function ProductList({ data, path }: ProductListProps) {
       }
     `}
       >
-        {data?.products.map((product: any, i: number) => (
+        {data?.products.map((product: Product, i: number) => (
           <div
             key={i}
             className={`${isMobile ? "snap-center shrink-0 w-72" : ""}`}

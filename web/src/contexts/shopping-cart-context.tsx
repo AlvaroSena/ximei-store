@@ -1,16 +1,17 @@
 import { createContext, useEffect, useState, type ReactNode } from "react";
 import { toast } from "sonner";
+import type { CartItem } from "../types/cart-item";
 
 interface ShoppingCartContextProviderProps {
   children?: ReactNode;
 }
 
 interface ShoppingCartContextProps {
-  addToCart: (item: any) => any;
+  addToCart: (item: CartItem) => any;
   deleteFromCart: (itemId: string) => void;
   cleanCart: () => void;
   finalizeOrder: () => void;
-  cart: any;
+  cart: CartItem[];
 }
 
 export const ShoppingCartContext = createContext(
@@ -20,7 +21,7 @@ export const ShoppingCartContext = createContext(
 export function ShoppingCartContextProvider({
   children,
 }: ShoppingCartContextProviderProps) {
-  const [cart, setCart] = useState<any>(() => {
+  const [cart, setCart] = useState<CartItem[]>(() => {
     const storedCart = localStorage.getItem("cart");
 
     if (storedCart) {
@@ -34,14 +35,14 @@ export function ShoppingCartContextProvider({
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
-  function addToCart(item: any) {
+  function addToCart(item: CartItem) {
     const itemAlreadyExists = cart.find(
-      (cartItem: any) => cartItem.id === item.id
+      (cartItem: CartItem) => cartItem.id === item.id
     );
 
     if (itemAlreadyExists) {
       const itemAlreadyExistsIndex = cart.findIndex(
-        (cartItem: any) => cartItem.id === itemAlreadyExists.id
+        (cartItem: CartItem) => cartItem.id === itemAlreadyExists.id
       );
 
       cart.splice(itemAlreadyExistsIndex, 1);
@@ -58,17 +59,15 @@ export function ShoppingCartContextProvider({
   }
 
   function deleteFromCart(itemId: string) {
-    const item = cart.find((cartItem: any) => cartItem.id === itemId);
+    const item = cart.find((cartItem: CartItem) => cartItem.id === itemId);
 
     if (item === null) {
       console.error("Item not found");
       return;
     }
 
-    console.log(item.id);
-
     const itemIndex = cart.findIndex(
-      (cartItem: any) => cartItem.id === item.id
+      (cartItem: CartItem) => cartItem.id === item?.id
     );
 
     console.log(itemIndex);
@@ -90,7 +89,7 @@ export function ShoppingCartContextProvider({
   function finalizeOrder() {
     let message = "# *Meu Pedido:*\n\n";
 
-    cart.map((cartItem: any) => {
+    cart.map((cartItem: CartItem) => {
       return (message += `${cartItem.quantity}x ${
         cartItem.title
       } - ${Intl.NumberFormat("pt-BR", {
@@ -100,7 +99,7 @@ export function ShoppingCartContextProvider({
     });
 
     let total = cart.reduce(
-      (sum: any, item: any) => sum + item.priceInCents * item.quantity,
+      (sum: number, item: CartItem) => sum + item.priceInCents * item.quantity,
       0
     );
 

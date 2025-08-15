@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { searchProducts } from "../lib/api";
 import { EmptyImage } from "./empty-imagem";
 import { LoaderCircle } from "lucide-react";
+import type { Product } from "../types/product";
 
 type SearchDrawerProps = {
   isOpen: boolean;
@@ -89,7 +90,7 @@ export default function SearchDrawer({ isOpen, onClose }: SearchDrawerProps) {
                 </div>
               ) : (
                 <React.Fragment>
-                  {data?.products.map((product: any) => {
+                  {data?.products.map((product: Product) => {
                     return (
                       <a
                         key={product.id}
