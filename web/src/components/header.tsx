@@ -63,26 +63,21 @@ export function Header() {
             </a>
           </nav>
 
-          <button className="md:hidden" onClick={() => setOpen(!open)}>
-            {open ? (
-              <XMarkIcon
-                className={`size-9 text-stone-900 transition hover:opacity-50`}
-                style={{
-                  animation: open
-                    ? "top-spin 0.3s forwards"
-                    : "top-spin-reverse 0.3s forwards",
-                }}
-              />
-            ) : (
-              <Bars3Icon
-                className={`size-9 text-stone-900 transition hover:opacity-50`}
-                style={{
-                  animation: open
-                    ? "bottom-spin 0.3s forwards"
-                    : "bottom-spin-reverse 0.3s forwards",
-                }}
-              />
-            )}
+          <button
+            className="md:hidden relative w-8 h-8 flex items-center justify-center group"
+            onClick={() => setOpen(!open)}
+          >
+            <span
+              className={`absolute h-0.5 w-6 bg-stone-900 rounded transition-all duration-300 ${
+                open ? "rotate-45 translate-y-0" : "-translate-y-1.5"
+              }`}
+            />
+
+            <span
+              className={`absolute h-0.5 w-6 bg-stone-900 rounded transition-all duration-300 ${
+                open ? "-rotate-45 translate-y-0" : "translate-y-1.5"
+              }`}
+            />
           </button>
 
           <div

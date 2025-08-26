@@ -111,7 +111,8 @@ export function ShoppingCartContextProvider({
       }
     ).format(total / 100)}`;
 
-    const url = `https://wa.me/${5511991100912}?text=${encodeURIComponent(
+    const phoneNumber = import.meta.env.VITE_API_URL;
+    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
       message
     )}`;
     window.open(url, "_blank");
