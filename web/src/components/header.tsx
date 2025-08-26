@@ -2,8 +2,6 @@ import { useState, useEffect, useContext } from "react";
 import {
   ShoppingBagIcon,
   MagnifyingGlassIcon,
-  Bars3Icon,
-  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import CartDrawer from "./cart-drawer";
 import SearchDrawer from "./search-drawer";
