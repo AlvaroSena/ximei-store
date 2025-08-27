@@ -15,6 +15,11 @@ import Zoom from "react-medium-image-zoom";
 import { getProduct } from "../lib/api";
 import { Title, Link, Meta } from "react-head";
 import type { Image } from "../types/image";
+import type { Product as ProductType } from "../types/product";
+
+type GetProductResponse = {
+  product: ProductType;
+};
 
 export function Product() {
   const isMobile = useIsMobile(768);
@@ -27,7 +32,7 @@ export function Product() {
     return;
   }
 
-  const { data, isPending, error } = useQuery({
+  const { data, isPending, error } = useQuery<GetProductResponse>({
     queryKey: ["product"],
     queryFn: async () => await getProduct(productSlug),
   });
