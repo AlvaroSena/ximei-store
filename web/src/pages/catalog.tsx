@@ -3,6 +3,7 @@ import { LoaderCircle } from "lucide-react";
 import { getProducts } from "../lib/api";
 import { ProductList } from "../components/product-list";
 import { useLocation } from "react-router-dom";
+import { Title, Link, Meta } from "react-head";
 
 export function Catalog() {
   const location = useLocation();
@@ -36,6 +37,13 @@ export function Catalog() {
 
   return (
     <div>
+      <Title>Catálogo | Loja Ximei</Title>
+      <Link rel="canonical" href="https://ximei.vercel.app/catalogo" />
+      <Meta
+        name="description"
+        content="Veja todas as bolsas disponíveis no catálogo da Ximei."
+      />
+
       <div className="max-w-[1120px] mx-auto">
         <div className="bg-neutral-200 flex flex-col items-center justify-center h-64 gap-6">
           <div className="flex flex-row items-center gap-4 text-stone-700 font-medium">
