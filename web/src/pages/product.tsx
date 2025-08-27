@@ -13,6 +13,7 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import Zoom from "react-medium-image-zoom";
 import { getProduct } from "../lib/api";
+import { Title, Link, Meta } from "react-head";
 import type { Image } from "../types/image";
 
 export function Product() {
@@ -63,6 +64,16 @@ export function Product() {
 
   return (
     <div className="max-w-[1120px] mx-auto my-8 flex flex-col md:flex-row gap-8">
+      <Title>
+        {data.product ? `${data.product.title} | Loja Ximei` : "Carregando..."}
+      </Title>
+
+      <Link rel="canonical" href={`https://ximei.vercel.app/${productSlug}`} />
+      <Meta
+        name="description"
+        content={`Compre a bolsa ${data?.product.title} na loja Ximei. Disponível online.`}
+      />
+
       <div
         className={`
           ${

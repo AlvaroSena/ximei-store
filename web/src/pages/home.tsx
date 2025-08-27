@@ -4,6 +4,7 @@ import { getProducts } from "../lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { LoaderCircle } from "lucide-react";
 import { ProductList } from "../components/product-list";
+import { Title, Link, Meta } from "react-head";
 
 export function Home() {
   const location = useLocation();
@@ -37,6 +38,13 @@ export function Home() {
 
   return (
     <div>
+      <Title>Home | Loja Ximei</Title>
+      <Link rel="canonical" href="https://ximei.vercel.app/" />
+      <Meta
+        name="description"
+        content="Descubra o catálogo de bolsas da loja Ximei. Elegância e estilo em cada detalhe."
+      />
+
       <HeroBanner />
 
       <div className="max-w-[1120px] px-4 lg:px-0 mx-auto my-32">
