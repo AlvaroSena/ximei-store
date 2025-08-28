@@ -6,7 +6,6 @@ interface UpdateProductRequest {
   id: string;
   title: string;
   description?: string;
-  price: number;
   brand: string;
   categoryId: string;
 }
@@ -16,7 +15,6 @@ export class UpdateProduct {
     id,
     title,
     description,
-    price,
     brand,
     categoryId,
   }: UpdateProductRequest) {
@@ -37,7 +35,6 @@ export class UpdateProduct {
       data: {
         title,
         description,
-        priceInCents: price * 100,
         brand,
         slug: slugify(title),
         categoryId,
