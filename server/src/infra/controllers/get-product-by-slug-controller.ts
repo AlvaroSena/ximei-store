@@ -9,11 +9,12 @@ export class GetProductBySlugController {
     });
 
     try {
+      const variantSlug = request.query.variant as string;
       const { slug } = getProductBySlugRequestParams.parse(request.params);
 
       const getProduct = new GetProductBySlug();
 
-      const product = await getProduct.execute({ slug });
+      const product = await getProduct.execute({ slug, variantSlug });
 
       return reply.json(product);
     } catch (err) {
