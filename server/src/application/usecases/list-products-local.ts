@@ -27,17 +27,7 @@ export class ListProductsLocal {
         skip,
         take,
         include: {
-          variants: {
-            include: {
-              attributes: {
-                select: {
-                  id: true,
-                  attributeName: true,
-                  attributeValue: true,
-                },
-              },
-            },
-          },
+          variants: true,
         },
       }),
       prisma.product.count(),

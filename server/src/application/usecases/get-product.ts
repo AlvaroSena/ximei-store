@@ -12,7 +12,12 @@ export class GetProduct {
         id,
       },
       include: {
-        variants: true,
+        variants: {
+          include: {
+            attributes: true,
+            promotions: true,
+          },
+        },
       },
     });
 

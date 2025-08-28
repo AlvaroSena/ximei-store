@@ -12,7 +12,12 @@ export class GetProductBySlug {
         slug,
       },
       include: {
-        images: true,
+        variants: {
+          include: {
+            attributes: true,
+            promotions: true,
+          },
+        },
       },
     });
 

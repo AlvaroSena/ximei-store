@@ -12,6 +12,7 @@ import { DeleteProductController } from "../controllers/delete-product-controlle
 import { GetProductBySlugController } from "../controllers/get-product-by-slug-controller";
 import { SearchProductController } from "../controllers/search-product-controller";
 import { CreateVariantAttributesController } from "../controllers/create-variant-attributes-controller";
+import { CreateVariantPromotionController } from "../controllers/create-variant-promotion-controller";
 
 export const routes = Router();
 
@@ -31,6 +32,8 @@ const searchProductController = new SearchProductController();
 
 const createVariantAttributes = new CreateVariantAttributesController();
 
+const createVariantPromotionController = new CreateVariantPromotionController();
+
 routes.post("/v1/categories", createCategoryController.handle);
 routes.get("/v1/categories", listCategoriesController.handle);
 routes.put("/v1/categories/update/:id", updateCategoryController.handle);
@@ -49,3 +52,5 @@ routes.post(
   "/v1/variants-attributes/variantId/:variantId",
   createVariantAttributes.handle
 );
+
+routes.post("/v1/promotions", createVariantPromotionController.handle);
