@@ -12,7 +12,7 @@ export class GetProduct {
         id,
       },
       include: {
-        images: true,
+        variants: true,
       },
     });
 

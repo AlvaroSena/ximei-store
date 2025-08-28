@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { ResourceNotFoundError } from "../../application/errors/resource-not-found-error";
 import { z, ZodError } from "zod";
+import { ResourceAlreadyExistsError } from "../../application/errors/resource-already-exists";
 
 export function errorHandler(
   err: unknown,
@@ -14,6 +15,10 @@ export function errorHandler(
 
   if (err instanceof ResourceNotFoundError) {
     return reply.status(404).json({ message: err.message });
+  }
+
+  if (err instanceof ResourceAlreadyExistsError) {
+    return reply.status(409).json({ message: err.message });
   }
 
   return reply.status(500).json({ message: err });
