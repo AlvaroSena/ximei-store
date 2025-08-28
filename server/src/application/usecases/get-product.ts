@@ -15,7 +15,7 @@ export class GetProduct {
         variants: {
           include: {
             attributes: true,
-            promotions: true,
+            offers: true,
           },
         },
       },

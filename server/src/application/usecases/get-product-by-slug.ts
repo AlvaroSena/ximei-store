@@ -15,7 +15,7 @@ export class GetProductBySlug {
         variants: {
           include: {
             attributes: true,
-            promotions: true,
+            offers: true,
           },
         },
       },

@@ -2,11 +2,12 @@ import express, { type Application } from "express";
 import cors from "cors";
 import { routes } from "./infra/routes";
 import { errorHandler } from "./infra/middlewares/error-handler";
+import { env } from "./utils/env";
 
 const app: Application = express();
 app.use(
   cors({
-    origin: process.env.WEB_ORIGIN!,
+    origin: env.WEB_ORIGIN,
     methods: "*",
   })
 );
