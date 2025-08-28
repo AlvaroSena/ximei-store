@@ -4,10 +4,11 @@ import { ResourceAlreadyExistsError } from "../errors/resource-already-exists";
 
 interface CreateCategoryRequest {
   title: string;
+  description?: string;
 }
 
 export class CreateCategory {
-  async execute({ title }: CreateCategoryRequest) {
+  async execute({ title, description }: CreateCategoryRequest) {
     const categorySlug = slugify(title);
 
     const categoryAlreadyExists = await prisma.category.findUnique({
@@ -20,11 +21,16 @@ export class CreateCategory {
       throw new ResourceAlreadyExistsError("Category already exists");
     }
 
-    await prisma.category.create({
+    const category = await prisma.category.create({
       data: {
         title,
         slug: slugify(title),
+        description,
       },
     });
+
+    return {
+      categoryId: category.id,
+    };
   }
 }
