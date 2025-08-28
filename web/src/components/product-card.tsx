@@ -3,16 +3,15 @@ import { PlusIcon } from "@heroicons/react/24/outline";
 import { EmptyImage } from "./empty-imagem";
 import { ShoppingCartContext } from "../contexts/shopping-cart-context";
 import type { Product } from "../types/product";
-import type { Image } from "../types/image";
+// import type { Image } from "../types/image";
 
 type ProductCardProps = {
-  images: Image[];
   product: Product;
 };
 
-export function ProductCard({ images, product }: ProductCardProps) {
+export function ProductCard({ product }: ProductCardProps) {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const [currentImage, setCurrentImage] = useState(images[0]?.url);
+  // const [currentImage, setCurrentImage] = useState(images[0]?.url);
   const { addToCart } = useContext(ShoppingCartContext);
 
   useEffect(() => {
@@ -30,17 +29,17 @@ export function ProductCard({ images, product }: ProductCardProps) {
       className="block w-full max-w-72 text-stone-900 font-semibold text-lg"
     >
       <div className="h-72 w-full relative group">
-        {!currentImage ? (
+        {!product.imageUrl ? (
           <EmptyImage />
         ) : (
           <img
-            src={currentImage}
+            src={product.imageUrl}
             alt="Imagem da Bolsa deste produto"
             className="w-full h-full object-cover"
-            onMouseEnter={() =>
-              images.length > 1 && setCurrentImage(images[1].url)
-            }
-            onMouseLeave={() => setCurrentImage(images[0].url)}
+            // onMouseEnter={() =>
+            //   images.length > 1 && setCurrentImage(images[1].url)
+            // }
+            // onMouseLeave={() => setCurrentImage(images[0].url)}
           />
         )}
 
@@ -55,7 +54,7 @@ export function ProductCard({ images, product }: ProductCardProps) {
             addToCart({
               ...product,
               quantity: 1,
-              totalPriceInCents: product.priceInCents * 1,
+              totalPriceInCents: product.variants[0].priceInCents * 1,
             })
           }
         >
@@ -73,7 +72,7 @@ export function ProductCard({ images, product }: ProductCardProps) {
           {Intl.NumberFormat("pt-BR", {
             style: "currency",
             currency: "BRL",
-          }).format(product.priceInCents / 100)}
+          }).format(product.variants[0].priceInCents / 100)}
         </span>
       </div>
     </a>

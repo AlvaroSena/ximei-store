@@ -20,6 +20,7 @@ model Category {
 
 model Product {
   id          String   @id @default(uuid())
+  imageUrl    String?  @map("image_url")
   title       String
   description String?
   slug        String   @unique

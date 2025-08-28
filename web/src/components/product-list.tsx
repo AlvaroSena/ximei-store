@@ -31,7 +31,7 @@ export function ProductList({ data, path }: ProductListProps) {
             key={i}
             className={`${isMobile ? "snap-center shrink-0 w-72" : ""}`}
           >
-            <ProductCard images={product.images} product={product} />
+            <ProductCard product={product} />
           </div>
         ))}
       </div>

@@ -14,8 +14,9 @@ import { useQuery } from "@tanstack/react-query";
 import Zoom from "react-medium-image-zoom";
 import { getProduct } from "../lib/api";
 import { Title, Link, Meta } from "react-head";
-import type { Image } from "../types/image";
+// import type { Image } from "../types/image";
 import type { Product as ProductType } from "../types/product";
+import { EmptyImage } from "../components/empty-imagem";
 
 type GetProductResponse = {
   product: ProductType;
@@ -79,7 +80,7 @@ export function Product() {
         content={`Compre a bolsa ${data?.product.title} na loja Ximei. Disponível online.`}
       />
 
-      <div
+      {/* <div
         className={`
           ${
             isMobile
@@ -115,7 +116,22 @@ export function Product() {
             </React.Fragment>
           );
         })}
+      </div> */}
+
+      <div>
+        {data?.product.imageUrl ? (
+          <Zoom>
+            <img
+              src={data?.product.imageUrl}
+              alt=""
+              className="w-full h-full object-cover"
+            />
+          </Zoom>
+        ) : (
+          <EmptyImage />
+        )}
       </div>
+
       <div className="w-full px-4 lg:px-0 flex flex-col gap-5">
         <h1 className="text-4xl font-bold text-stone-900">
           {data?.product.title}
@@ -124,12 +140,36 @@ export function Product() {
           {Intl.NumberFormat("pt-BR", {
             style: "currency",
             currency: "BRL",
-          }).format(data?.product.priceInCents / 100)}
+          }).format(data?.product.variants[0].priceInCents / 100)}
         </span>
 
         <div className="flex flex-row items-center gap-3">
           <div className="size-2 bg-green-500 rounded-full animate-pulse"></div>
           <p className="font-medium text-stone-900">Em estoque</p>
+        </div>
+
+        <div>
+          {data?.product.variants.map((variant) => {
+            return (
+              <div key={variant.id}>
+                <div>
+                  <p>{variant.title}</p>
+                  <img
+                    src={variant.imageUrl ?? ""}
+                    alt=""
+                    className="size-14"
+                  />
+                </div>
+                {variant.attributes.map((variantAttribute) => {
+                  return (
+                    <div>
+                      <p>{variantAttribute.attributeValue}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
         </div>
 
         <QuantityInput
@@ -144,7 +184,8 @@ export function Product() {
             addToCart({
               ...data?.product,
               quantity,
-              totalPriceInCents: data?.product.priceInCents * quantity,
+              totalPriceInCents:
+                data?.product.variants[0].priceInCents * quantity,
             })
           }
         >
