@@ -12,7 +12,10 @@ import { DeleteProductController } from "../controllers/delete-product-controlle
 import { GetProductBySlugController } from "../controllers/get-product-by-slug-controller";
 import { SearchProductController } from "../controllers/search-product-controller";
 import { CreateVariantAttributesController } from "../controllers/create-variant-attributes-controller";
-import { CreateVariantPromotionController } from "../controllers/create-variant-promotion-controller";
+import { CreateOfferController } from "../controllers/create-offer-controller";
+import { ListOffersController } from "../controllers/list-offers-controller";
+import { GetOfferController } from "../controllers/get-offer-controller";
+import { DeleteOfferController } from "../controllers/delete-offer-controller";
 
 export const routes = Router();
 
@@ -32,7 +35,10 @@ const searchProductController = new SearchProductController();
 
 const createVariantAttributes = new CreateVariantAttributesController();
 
-const createVariantPromotionController = new CreateVariantPromotionController();
+const createOfferController = new CreateOfferController();
+const listOffersController = new ListOffersController();
+const getOfferController = new GetOfferController();
+const deleteOfferController = new DeleteOfferController();
 
 routes.post("/v1/categories", createCategoryController.handle);
 routes.get("/v1/categories", listCategoriesController.handle);
@@ -53,4 +59,7 @@ routes.post(
   createVariantAttributes.handle
 );
 
-routes.post("/v1/promotions", createVariantPromotionController.handle);
+routes.post("/v1/offers", createOfferController.handle);
+routes.get("/v1/offers", listOffersController.handle);
+routes.get("/v1/offers/:id", getOfferController.handle);
+routes.delete("/v1/offers/delete/:id", deleteOfferController.handle);

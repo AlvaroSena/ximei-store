@@ -44,7 +44,7 @@ model ProductVariant {
 
   product    Product            @relation(fields: [productId], references: [id], onDelete: Cascade)
   attributes VariantAttribute[]
-  promotions VariantPromotion[]
+  offers     Offer[]
 
   @@map("product_variants")
 }
@@ -60,7 +60,7 @@ model VariantAttribute {
   @@map("variant_attributes")
 }
 
-model VariantPromotion {
+model Offer {
   id           String @id @default(uuid())
   variantId    String @map("variant_id")
   title        String
@@ -69,5 +69,5 @@ model VariantPromotion {
 
   variant ProductVariant @relation(fields: [variantId], references: [id])
 
-  @@map("variant_promotions")
+  @@map("offers")
 }

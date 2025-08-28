@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import { CreateVariantPromotion } from "../../application/usecases/create-variant-promotion";
+import { CreateOffer } from "../../application/usecases/create-offer";
 import { z } from "zod";
 
-export class CreateVariantPromotionController {
+export class CreateOfferController {
   async handle(request: Request, reply: Response, next: NextFunction) {
-    const createVariantPromotionRequestBody = z.object({
+    const createOfferRequestBody = z.object({
       variantId: z.string(),
       title: z.string(),
       minQty: z.number(),
@@ -12,11 +12,12 @@ export class CreateVariantPromotionController {
     });
 
     try {
-      const { variantId, title, minQty, price } =
-        createVariantPromotionRequestBody.parse(request.body);
+      const { variantId, title, minQty, price } = createOfferRequestBody.parse(
+        request.body
+      );
 
-      const createVariantPromotion = new CreateVariantPromotion();
-      const { promotionId } = await createVariantPromotion.execute({
+      const createOffer = new CreateOffer();
+      const { promotionId } = await createOffer.execute({
         variantId,
         title,
         minQty,

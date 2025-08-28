@@ -1,20 +1,15 @@
 import { prisma } from "../../infra/prisma";
 import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 
-interface CreateVariantPromotionRequest {
+interface CreateOfferRequest {
   variantId: string;
   title: string;
   minQty: number;
   price: number;
 }
 
-export class CreateVariantPromotion {
-  async execute({
-    variantId,
-    title,
-    minQty,
-    price,
-  }: CreateVariantPromotionRequest) {
+export class CreateOffer {
+  async execute({ variantId, title, minQty, price }: CreateOfferRequest) {
     const variant = await prisma.productVariant.findUnique({
       where: {
         id: variantId,
@@ -25,7 +20,7 @@ export class CreateVariantPromotion {
       throw new ResourceNotFoundError("Variant not found");
     }
 
-    const promotion = await prisma.variantPromotion.create({
+    const promotion = await prisma.offer.create({
       data: {
         variantId,
         title,
