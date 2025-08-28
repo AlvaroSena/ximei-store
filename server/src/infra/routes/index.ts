@@ -17,6 +17,9 @@ import { ListOffersController } from "../controllers/list-offers-controller";
 import { GetOfferController } from "../controllers/get-offer-controller";
 import { DeleteOfferController } from "../controllers/delete-offer-controller";
 import { ListProductVariantsController } from "../controllers/list-product-variants-controller";
+import { CreateProductVariantController } from "../controllers/create-product-variant-controller";
+import { UpdateProductVariantController } from "../controllers/update-product-variant-controller";
+import { DeleteProductVariantController } from "../controllers/delete-product-variant-controller";
 
 export const routes = Router();
 
@@ -34,7 +37,10 @@ const deleteProductController = new DeleteProductController();
 const getProductBySlugController = new GetProductBySlugController();
 const searchProductController = new SearchProductController();
 
+const createProductVariantsController = new CreateProductVariantController();
 const listProductVariantsController = new ListProductVariantsController();
+const updateVariantController = new UpdateProductVariantController();
+const deleteProductVariantController = new DeleteProductVariantController();
 
 const createVariantAttributes = new CreateVariantAttributesController();
 
@@ -57,13 +63,19 @@ routes.delete("/v1/products/delete/:id", deleteProductController.handle);
 routes.get("/v1/products/q/:slug", getProductBySlugController.handle);
 routes.get("/v1/products/search/filter", searchProductController.handle);
 
+routes.post(
+  "/v1/variants/product/:productId",
+  createProductVariantsController.handle
+);
 routes.get(
-  "/v1/variants/productId/:productId",
+  "/v1/variants/product/:productId",
   listProductVariantsController.handle
 );
+routes.put("/v1/variants/update/:id", updateVariantController.handle);
+routes.delete("/v1/variants/delete/:id", deleteProductVariantController.handle);
 
 routes.post(
-  "/v1/variants-attributes/variantId/:variantId",
+  "/v1/variants-attributes/variant/:variantId",
   createVariantAttributes.handle
 );
 

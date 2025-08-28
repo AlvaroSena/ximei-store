@@ -33,7 +33,6 @@ export class CreateProductController {
 
       return reply.status(201).send({ productId });
     } catch (err) {
-      console.log(err);
       next(err);
     }
   }
