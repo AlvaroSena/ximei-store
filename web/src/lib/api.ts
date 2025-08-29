@@ -15,9 +15,13 @@ export async function getProducts(page: number, perPage: number) {
   }
 }
 
-export async function getProduct(slug: string) {
+export async function getProduct(slug: string, variant?: string) {
   try {
-    const response = await api.get(`/products/q/${slug}`);
+    const url = variant
+      ? `/products/q/${slug}?variant=${variant}`
+      : `/products/q/${slug}`;
+
+    const response = await api.get(url);
     const data = response.data;
 
     return data;

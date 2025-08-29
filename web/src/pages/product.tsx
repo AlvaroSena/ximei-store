@@ -1,22 +1,13 @@
-import React, { useContext, useState } from "react";
-import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
-import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-} from "@headlessui/react";
-import { QuantityInput } from "../components/quantity-input";
 import { LoaderCircle } from "lucide-react";
 import { useIsMobile } from "../hooks/useIsMobile";
-import { ShoppingCartContext } from "../contexts/shopping-cart-context";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import Zoom from "react-medium-image-zoom";
 import { getProduct } from "../lib/api";
 import { Title, Link, Meta } from "react-head";
 // import type { Image } from "../types/image";
 import type { Product as ProductType } from "../types/product";
-import { EmptyImage } from "../components/empty-imagem";
+import { ProductTemplate } from "../components/product-template";
+import { useState } from "react";
 
 type GetProductResponse = {
   product: ProductType;
@@ -25,9 +16,9 @@ type GetProductResponse = {
 export function Product() {
   const isMobile = useIsMobile(768);
   const { productSlug } = useParams();
-  const { addToCart } = useContext(ShoppingCartContext);
+  const [searchParams] = useSearchParams();
 
-  const [quantity, setQuantity] = useState(1);
+  const variant = searchParams.get("variant") as string;
 
   if (!productSlug) {
     return;
@@ -35,20 +26,8 @@ export function Product() {
 
   const { data, isPending, error } = useQuery<GetProductResponse>({
     queryKey: ["product"],
-    queryFn: async () => await getProduct(productSlug),
+    queryFn: async () => await getProduct(productSlug, variant),
   });
-
-  function increaseQuantity() {
-    setQuantity(quantity + 1);
-  }
-
-  function decreaseQuantity() {
-    if (quantity === 1) {
-      return;
-    }
-
-    setQuantity(quantity - 1);
-  }
 
   if (isPending) {
     return (
@@ -118,116 +97,10 @@ export function Product() {
         })}
       </div> */}
 
-      <div>
-        {data?.product.imageUrl ? (
-          <Zoom>
-            <img
-              src={data?.product.imageUrl}
-              alt=""
-              className="w-full h-full object-cover"
-            />
-          </Zoom>
-        ) : (
-          <EmptyImage />
-        )}
-      </div>
-
-      <div className="w-full px-4 lg:px-0 flex flex-col gap-5">
-        <h1 className="text-4xl font-bold text-stone-900">
-          {data?.product.title}
-        </h1>
-        <span className="text-3xl font-semibold text-stone-900">
-          {Intl.NumberFormat("pt-BR", {
-            style: "currency",
-            currency: "BRL",
-          }).format(data?.product.variants[0].priceInCents / 100)}
-        </span>
-
-        <div className="flex flex-row items-center gap-3">
-          <div className="size-2 bg-green-500 rounded-full animate-pulse"></div>
-          <p className="font-medium text-stone-900">Em estoque</p>
-        </div>
-
-        <div>
-          {data?.product.variants.map((variant) => {
-            return (
-              <div key={variant.id}>
-                <div>
-                  <p>{variant.title}</p>
-                  <img
-                    src={variant.imageUrl ?? ""}
-                    alt=""
-                    className="size-14"
-                  />
-                </div>
-                {variant.attributes.map((variantAttribute) => {
-                  return (
-                    <div>
-                      <p>{variantAttribute.attributeValue}</p>
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })}
-        </div>
-
-        <QuantityInput
-          quantity={quantity}
-          increaseQuantity={increaseQuantity}
-          decreaseQuantity={decreaseQuantity}
-        />
-
-        <button
-          className="py-3 px-4 font-semibold text-white bg-red-900 text-xl w-full transition hover:opacity-80"
-          onClick={() =>
-            addToCart({
-              ...data?.product,
-              quantity,
-              totalPriceInCents:
-                data?.product.variants[0].priceInCents * quantity,
-            })
-          }
-        >
-          Adicionar ao carrinho
-        </button>
-
-        <div className="w-full h-[1px] bg-stone-200"></div>
-
-        <Disclosure>
-          {({ open }) => (
-            <React.Fragment>
-              <DisclosureButton className="flex flex-row items-center justify-between font-medium text-lg text-stone-900 py-3">
-                DESCRIÇÃO
-                {open ? (
-                  <MinusIcon
-                    className="size-5 text-stone-900 transition hover:opacity-50"
-                    style={{
-                      animation: open && "top-spin-reverse 0.3s forwards",
-                    }}
-                  />
-                ) : (
-                  <PlusIcon
-                    className="size-5 text-stone-900 transition hover:opacity-50"
-                    style={{
-                      animation: open
-                        ? "bottom-spin 0.3s forwards"
-                        : "bottom-spin-reverse 0.3s forwards",
-                    }}
-                  />
-                )}
-              </DisclosureButton>
-              {open && (
-                <DisclosurePanel className="text-stone-700 font-medium text-lg">
-                  {data?.product.description}
-                </DisclosurePanel>
-              )}
-            </React.Fragment>
-          )}
-        </Disclosure>
-
-        <div className="w-full h-[1px] bg-stone-200"></div>
-      </div>
+      <ProductTemplate
+        product={data?.product}
+        variants={data?.product.variants}
+      />
     </div>
   );
 }
