@@ -10,7 +10,7 @@ interface CreateOfferRequest {
 
 export class CreateOffer {
   async execute({ variantId, title, minQty, price }: CreateOfferRequest) {
-    const variant = await prisma.productVariant.findUnique({
+    const variant = await prisma.variant.findUnique({
       where: {
         id: variantId,
       },

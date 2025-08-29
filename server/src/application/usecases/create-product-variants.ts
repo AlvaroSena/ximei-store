@@ -26,7 +26,7 @@ export class CreateProductVariants {
 
     await Promise.all(
       variants.map(({ title, price }) =>
-        prisma.productVariant.create({
+        prisma.variant.create({
           data: {
             title,
             productId,

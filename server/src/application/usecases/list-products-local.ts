@@ -26,9 +26,6 @@ export class ListProductsLocal {
       prisma.product.findMany({
         skip,
         take,
-        include: {
-          variants: true,
-        },
       }),
       prisma.product.count(),
     ]);

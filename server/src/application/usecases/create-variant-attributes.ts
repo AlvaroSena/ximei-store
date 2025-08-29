@@ -13,7 +13,7 @@ interface CreateVariantAttributesRequest {
 
 export class CreateVariantAttributes {
   async execute({ variantId, attributes }: CreateVariantAttributesRequest) {
-    const variant = await prisma.productVariant.findUnique({
+    const variant = await prisma.variant.findUnique({
       where: {
         id: variantId,
       },

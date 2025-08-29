@@ -11,13 +11,14 @@ export class UpdateProductController {
     const updateProductRequestBody = z.object({
       title: z.string(),
       description: z.string(),
+      price: z.number(),
       brand: z.string(),
       categoryId: z.string(),
     });
 
     try {
       const { id } = updateProductRequestParams.parse(request.params);
-      const { title, description, brand, categoryId } =
+      const { title, description, price, brand, categoryId } =
         updateProductRequestBody.parse(request.body);
 
       const updateProduct = new UpdateProduct();
@@ -26,6 +27,7 @@ export class UpdateProductController {
         id,
         title,
         description,
+        price,
         brand,
         categoryId,
       });

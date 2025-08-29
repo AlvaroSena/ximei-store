@@ -7,6 +7,7 @@ export class CreateProductController {
     const createProductRequestBody = z.object({
       title: z.string(),
       description: z.string(),
+      price: z.number(),
       brand: z.string(),
       categoryId: z.uuid(),
       variants: z.array(
@@ -18,7 +19,7 @@ export class CreateProductController {
     });
 
     try {
-      const { title, description, brand, categoryId, variants } =
+      const { title, description, price, brand, categoryId, variants } =
         createProductRequestBody.parse(request.body);
 
       const createProduct = new CreateProduct();
@@ -26,6 +27,7 @@ export class CreateProductController {
       const { productId } = await createProduct.execute({
         title,
         description,
+        price,
         brand,
         categoryId,
         variants,

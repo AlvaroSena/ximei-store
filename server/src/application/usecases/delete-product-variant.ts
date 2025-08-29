@@ -7,7 +7,7 @@ interface DeleteProductVariantRequest {
 
 export class DeleteProductVariant {
   async execute({ id }: DeleteProductVariantRequest) {
-    const variant = await prisma.productVariant.findUnique({
+    const variant = await prisma.variant.findUnique({
       where: {
         id,
       },
@@ -17,7 +17,7 @@ export class DeleteProductVariant {
       throw new ResourceNotFoundError("Variant not found");
     }
 
-    await prisma.productVariant.delete({
+    await prisma.variant.delete({
       where: {
         id,
       },

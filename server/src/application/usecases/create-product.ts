@@ -10,6 +10,7 @@ type Variant = {
 interface CreateProductRequest {
   title: string;
   description?: string;
+  price: number;
   brand: string;
   categoryId: string;
   variants: Variant[];
@@ -23,6 +24,7 @@ export class CreateProduct {
   async execute({
     title,
     description,
+    price,
     brand,
     categoryId,
     variants,
@@ -41,6 +43,7 @@ export class CreateProduct {
       data: {
         title,
         description,
+        priceInCents: price * 100,
         brand,
         slug: slugify(title),
         categoryId: category.id,
@@ -49,7 +52,7 @@ export class CreateProduct {
 
     await Promise.all(
       variants.map(({ title, price }) =>
-        prisma.productVariant.create({
+        prisma.variant.create({
           data: {
             title,
             productId: product.id,

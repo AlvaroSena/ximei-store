@@ -10,7 +10,7 @@ interface UpdateProductVariantRequest {
 
 export class UpdateProductVariant {
   async execute({ id, title, price }: UpdateProductVariantRequest) {
-    const variant = await prisma.productVariant.findUnique({
+    const variant = await prisma.variant.findUnique({
       where: {
         id,
       },
@@ -20,7 +20,7 @@ export class UpdateProductVariant {
       throw new ResourceNotFoundError("Variant not found");
     }
 
-    await prisma.productVariant.update({
+    await prisma.variant.update({
       where: {
         id,
       },
