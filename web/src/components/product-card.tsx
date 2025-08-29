@@ -3,7 +3,6 @@ import { PlusIcon } from "@heroicons/react/24/outline";
 import { EmptyImage } from "./empty-imagem";
 import { ShoppingCartContext } from "../contexts/shopping-cart-context";
 import type { Product } from "../types/product";
-// import type { Image } from "../types/image";
 
 type ProductCardProps = {
   product: Product;
@@ -11,7 +10,7 @@ type ProductCardProps = {
 
 export function ProductCard({ product }: ProductCardProps) {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  // const [currentImage, setCurrentImage] = useState(images[0]?.url);
+  const [currentImage, setCurrentImage] = useState(product.imageUrls[0]);
   const { addToCart } = useContext(ShoppingCartContext);
 
   useEffect(() => {
@@ -29,21 +28,21 @@ export function ProductCard({ product }: ProductCardProps) {
       className="block w-full max-w-72 text-stone-900 font-semibold text-lg"
     >
       <div className="h-72 w-full relative group">
-        {!product.imageUrl ? (
+        {!currentImage ? (
           <EmptyImage />
         ) : (
           <img
-            src={product.imageUrl}
+            src={currentImage}
             alt="Imagem da Bolsa deste produto"
             className="w-full h-full object-cover"
-            // onMouseEnter={() =>
-            //   images.length > 1 && setCurrentImage(images[1].url)
-            // }
-            // onMouseLeave={() => setCurrentImage(images[0].url)}
+            onMouseEnter={() =>
+              product.imageUrls.length > 1 &&
+              setCurrentImage(product.imageUrls[1])
+            }
+            onMouseLeave={() => setCurrentImage(product.imageUrls[0])}
           />
         )}
 
-        {/* Botão com animação de surgimento */}
         <button
           className={`text-white bg-red-900 px-4 py-3 absolute bottom-0 hover:opacity-90 ${
             isMobile
@@ -54,7 +53,7 @@ export function ProductCard({ product }: ProductCardProps) {
             addToCart({
               ...product,
               quantity: 1,
-              totalPriceInCents: product.variants[0].priceInCents * 1,
+              totalPriceInCents: product.priceInCents * 1,
             })
           }
         >
@@ -72,7 +71,7 @@ export function ProductCard({ product }: ProductCardProps) {
           {Intl.NumberFormat("pt-BR", {
             style: "currency",
             currency: "BRL",
-          }).format(product.variants[0].priceInCents / 100)}
+          }).format(product.priceInCents / 100)}
         </span>
       </div>
     </a>

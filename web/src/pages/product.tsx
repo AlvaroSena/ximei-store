@@ -1,24 +1,24 @@
+import { useEffect, useState } from "react";
 import { LoaderCircle } from "lucide-react";
-import { useIsMobile } from "../hooks/useIsMobile";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getProduct } from "../lib/api";
 import { Title, Link, Meta } from "react-head";
-// import type { Image } from "../types/image";
 import type { Product as ProductType } from "../types/product";
 import { ProductTemplate } from "../components/product-template";
-import { useState } from "react";
+import type { Variant } from "../types/variant";
 
 type GetProductResponse = {
   product: ProductType;
 };
 
 export function Product() {
-  const isMobile = useIsMobile(768);
   const { productSlug } = useParams();
   const [searchParams] = useSearchParams();
+  const [selectedVariant, setSelectedVariant] = useState<Variant | null>(null);
+  const [isLoadingVariant, setIsLoadingVariant] = useState(false);
 
-  const variant = searchParams.get("variant") as string;
+  const variantParam = searchParams.get("variant") as string;
 
   if (!productSlug) {
     return;
@@ -26,10 +26,34 @@ export function Product() {
 
   const { data, isPending, error } = useQuery<GetProductResponse>({
     queryKey: ["product"],
-    queryFn: async () => await getProduct(productSlug, variant),
+    queryFn: async () => await getProduct(productSlug),
   });
 
+  useEffect(() => {
+    if (data && variantParam) {
+      setIsLoadingVariant(true);
+      const variant = data.product.variants?.find(
+        (item: Variant) => item.slug === variantParam
+      );
+
+      if (variant) {
+        setTimeout(() => {
+          setSelectedVariant(variant);
+          setIsLoadingVariant(false);
+        }, 250);
+      }
+    }
+  }, [data, variantParam]);
+
   if (isPending) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <LoaderCircle className="animate-spin text-red-900 size-10" />
+      </div>
+    );
+  }
+
+  if (isLoadingVariant) {
     return (
       <div className="flex items-center justify-center h-screen">
         <LoaderCircle className="animate-spin text-red-900 size-10" />
@@ -48,7 +72,7 @@ export function Product() {
   }
 
   return (
-    <div className="max-w-[1120px] mx-auto my-8 flex flex-col md:flex-row gap-8">
+    <>
       <Title>
         {data.product ? `${data.product.title} | Loja Ximei` : "Carregando..."}
       </Title>
@@ -59,48 +83,10 @@ export function Product() {
         content={`Compre a bolsa ${data?.product.title} na loja Ximei. Disponível online.`}
       />
 
-      {/* <div
-        className={`
-          ${
-            isMobile
-              ? "flex overflow-x-auto gap-4 snap-x snap-mandatory"
-              : `grid gap-4 ${
-                  data?.product.images.length > 1
-                    ? "grid-cols-2"
-                    : "grid-cols-1"
-                }`
-          }
-        `}
-      >
-        {data?.product.images.map((image: Image) => {
-          return (
-            <React.Fragment key={image.id}>
-              {!isMobile ? (
-                <Zoom>
-                  <img
-                    key={image.id}
-                    src={image.url}
-                    alt=""
-                    className="w-full h-full object-cover"
-                  />
-                </Zoom>
-              ) : (
-                <img
-                  key={image.id}
-                  src={image.url}
-                  alt=""
-                  className="w-full h-full object-cover"
-                />
-              )}
-            </React.Fragment>
-          );
-        })}
-      </div> */}
-
       <ProductTemplate
         product={data?.product}
-        variants={data?.product.variants}
+        currentVariant={selectedVariant}
       />
-    </div>
+    </>
   );
 }

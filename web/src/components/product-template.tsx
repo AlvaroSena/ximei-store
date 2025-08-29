@@ -6,17 +6,23 @@ import {
   DisclosurePanel,
 } from "@headlessui/react";
 import { QuantityInput } from "../components/quantity-input";
-import { EmptyImage } from "../components/empty-imagem";
 import { ShoppingCartContext } from "../contexts/shopping-cart-context";
 import Zoom from "react-medium-image-zoom";
+import type { Product } from "../types/product";
+import type { Variant } from "../types/variant";
+import { useSearchParams } from "react-router-dom";
 
 interface ProductTemplateProps {
-  product: any;
-  variants: any;
+  product: Product;
+  currentVariant: Variant | null;
 }
 
-export function ProductTemplate({ product, variants }: ProductTemplateProps) {
+export function ProductTemplate({
+  product,
+  currentVariant,
+}: ProductTemplateProps) {
   const { addToCart } = useContext(ShoppingCartContext);
+  const [, setSearchParams] = useSearchParams();
 
   const [quantity, setQuantity] = useState(1);
 
@@ -34,49 +40,73 @@ export function ProductTemplate({ product, variants }: ProductTemplateProps) {
 
   return (
     <div className="max-w-[1120px] mx-auto my-8 flex flex-col md:flex-row gap-8">
-      <div>
-        {product.imageUrl ? (
-          <Zoom>
-            <img
-              src={product.imageUrl}
-              alt=""
-              className="w-full h-full object-cover"
-            />
-          </Zoom>
-        ) : (
-          <EmptyImage />
-        )}
+      <div className="w-full flex flex-col gap-3">
+        <Zoom>
+          <img
+            src={currentVariant?.imageUrl ?? product.imageUrls[0]}
+            alt={product.title}
+            className="size-full object-cover"
+          />
+        </Zoom>
+
+        <div className="flex overflow-y-hidden overflow-x-auto gap-4 snap-x snap-mandatory px-4 md:px-0">
+          {product.imageUrls.map((url, index: number) => {
+            if (index === 0) return;
+
+            return (
+              <Zoom>
+                <img
+                  key={index}
+                  src={url}
+                  alt={product.title}
+                  className="size-32 object-cover"
+                />
+              </Zoom>
+            );
+          })}
+        </div>
       </div>
 
       <div className="w-full px-4 lg:px-0 flex flex-col gap-5">
-        <h1 className="text-4xl font-bold text-stone-900">{product.title}</h1>
+        <h1 className="text-4xl font-bold text-stone-900">
+          {product.title} {currentVariant?.title}
+        </h1>
         <span className="text-3xl font-semibold text-stone-900">
           {Intl.NumberFormat("pt-BR", {
             style: "currency",
             currency: "BRL",
-          }).format(500)}
+          }).format(
+            currentVariant?.priceInCents
+              ? currentVariant?.priceInCents / 100
+              : product.priceInCents / 100
+          )}
         </span>
 
         <div className="flex flex-row items-center gap-3">
-          <div className="size-2 bg-green-500 rounded-full animate-pulse"></div>
+          <div className="size-2 bg-emerald-600 rounded-full animate-pulse"></div>
           <p className="font-medium text-stone-900">Em estoque</p>
         </div>
 
-        <p>Cor</p>
+        <p>Cor: {currentVariant?.title}</p>
         <div className="flex flex-row items-center gap-3">
-          {variants.map((variant: any) => {
+          {product.variants?.map((variant: Variant) => {
             return (
-              <a
-                href={`/${product.slug}?variant=${variant.slug}`}
+              <button
                 key={variant.id}
-                className="block transition hover:outline outline-stone-300 hover:outline-offset-3"
+                className={`block hover:outline outline-stone-300 ${
+                  currentVariant?.slug === variant.slug &&
+                  "border border-stone-300 outline-none"
+                }`}
+                onClick={() => {
+                  setSearchParams({ variant: variant.slug });
+                }}
               >
                 <img
                   src={variant.imageUrl ?? ""}
                   alt=""
                   className="size-[70px]"
                 />
-              </a>
+              </button>
             );
           })}
         </div>
