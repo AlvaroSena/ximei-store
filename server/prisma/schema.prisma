@@ -36,39 +36,28 @@ model Product {
 }
 
 model Variant {
-  id           String  @id @default(uuid())
-  imageUrl     String? @map("image_url")
-  title        String
-  slug         String  @unique
-  productId    String
-  priceInCents Int     @map("price_in_cents")
+  id               String   @id @default(uuid())
+  imageUrl         String?  @map("image_url")
+  title            String
+  slug             String   @unique
+  productId        String
+  isAnOffer        Boolean? @default(false)
+  basePriceInCents Int?     @map("base_price_in_cents")
+  priceInCents     Int      @map("price_in_cents")
 
   product    Product            @relation(fields: [productId], references: [id], onDelete: Cascade)
   attributes VariantAttribute[]
-  offers     Offer[]
 
   @@map("variants")
 }
 
 model VariantAttribute {
-  id             String @id @default(uuid())
-  variantId      String @map("variant_id")
-  attributeName  String @map("attribute_name")
-  attributeValue String @map("attribute_value")
+  id              String   @id @default(uuid())
+  variantId       String   @map("variant_id")
+  attributeName   String   @map("attribute_name")
+  attributeValues String[] @map("attribute_value")
 
   variant Variant @relation(fields: [variantId], references: [id], onDelete: Cascade)
 
   @@map("variant_attributes")
-}
-
-model Offer {
-  id           String @id @default(uuid())
-  variantId    String @map("variant_id")
-  title        String
-  minQty       Int    @map("min_qty")
-  priceInCents Int    @map("price_in_cents")
-
-  variant Variant @relation(fields: [variantId], references: [id])
-
-  @@map("offers")
 }

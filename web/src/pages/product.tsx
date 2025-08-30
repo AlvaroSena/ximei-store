@@ -4,8 +4,8 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getProduct } from "../lib/api";
 import { Title, Link, Meta } from "react-head";
-import type { Product as ProductType } from "../types/product";
 import { ProductTemplate } from "../components/product-template";
+import type { Product as ProductType } from "../types/product";
 import type { Variant } from "../types/variant";
 
 type GetProductResponse = {
@@ -15,7 +15,9 @@ type GetProductResponse = {
 export function Product() {
   const { productSlug } = useParams();
   const [searchParams] = useSearchParams();
-  const [selectedVariant, setSelectedVariant] = useState<Variant | null>(null);
+  const [selectedVariant, setSelectedVariant] = useState<
+    Variant | null | undefined
+  >(null);
   const [isLoadingVariant, setIsLoadingVariant] = useState(false);
 
   const variantParam = searchParams.get("variant") as string;
@@ -41,6 +43,9 @@ export function Product() {
           setSelectedVariant(variant);
           setIsLoadingVariant(false);
         }, 250);
+      } else {
+        setSelectedVariant(undefined);
+        setIsLoadingVariant(false);
       }
     }
   }, [data, variantParam]);
@@ -62,6 +67,16 @@ export function Product() {
   }
 
   if (error) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <h3 className="text-xl font-semibold text-stone-900">
+          Produto não foi encontrado.
+        </h3>
+      </div>
+    );
+  }
+
+  if (!isLoadingVariant && selectedVariant === undefined) {
     return (
       <div className="flex items-center justify-center h-screen">
         <h3 className="text-xl font-semibold text-stone-900">

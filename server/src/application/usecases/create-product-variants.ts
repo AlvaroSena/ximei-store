@@ -5,6 +5,8 @@ import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 type Variant = {
   title: string;
   price: number;
+  basePrice?: number;
+  isAnOffer?: boolean;
 };
 
 interface CreateProductVariantsRequest {
@@ -25,13 +27,15 @@ export class CreateProductVariants {
     }
 
     await Promise.all(
-      variants.map(({ title, price }) =>
+      variants.map(({ title, price, basePrice, isAnOffer }) =>
         prisma.variant.create({
           data: {
             title,
             productId,
             priceInCents: price * 100,
             slug: slugify(title),
+            basePriceInCents: basePrice && basePrice * 100,
+            isAnOffer,
           },
         })
       )

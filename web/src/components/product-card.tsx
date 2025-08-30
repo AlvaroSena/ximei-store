@@ -1,7 +1,6 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { EmptyImage } from "./empty-imagem";
-import { ShoppingCartContext } from "../contexts/shopping-cart-context";
 import type { Product } from "../types/product";
 
 type ProductCardProps = {
@@ -11,7 +10,6 @@ type ProductCardProps = {
 export function ProductCard({ product }: ProductCardProps) {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [currentImage, setCurrentImage] = useState(product.imageUrls[0]);
-  const { addToCart } = useContext(ShoppingCartContext);
 
   useEffect(() => {
     function handleResize() {
@@ -43,26 +41,15 @@ export function ProductCard({ product }: ProductCardProps) {
           />
         )}
 
-        <button
-          className={`text-white bg-red-900 px-4 py-3 absolute bottom-0 hover:opacity-90 ${
+        <div
+          className={`text-white text-center bg-red-900 px-4 py-3 absolute bottom-0 hover:opacity-90 ${
             isMobile
               ? "w-auto"
               : "w-full opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 absolute bottom-0 transition-all duration-300 ease-out"
           }`}
-          onClick={() =>
-            addToCart({
-              ...product,
-              quantity: 1,
-              totalPriceInCents: product.priceInCents * 1,
-            })
-          }
         >
-          {isMobile ? (
-            <PlusIcon className="size-5 text-white" />
-          ) : (
-            "Adicionar ao carrinho"
-          )}
-        </button>
+          {isMobile ? <PlusIcon className="size-5 text-white" /> : "Ver item"}
+        </div>
       </div>
 
       <div className="flex flex-col items-center">

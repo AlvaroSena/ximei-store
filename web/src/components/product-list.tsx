@@ -1,6 +1,6 @@
 import { useIsMobile } from "../hooks/useIsMobile";
-import type { Product } from "../types/product";
 import { ProductCard } from "./product-card";
+import type { Product } from "../types/product";
 
 interface ProductListProps {
   data: {

@@ -16,7 +16,6 @@ export class GetProductBySlug {
         variants: {
           include: {
             attributes: true,
-            offers: true,
           },
         },
       },
@@ -34,7 +33,7 @@ export class GetProductBySlug {
       return {
         product: {
           id: product.id,
-          imageUrl: product.imageUrl,
+          imageUrls: product.imageUrls,
           title: product.title,
           description: product.description,
           slug: product.slug,

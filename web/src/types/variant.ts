@@ -7,5 +7,7 @@ export type Variant = {
   slug: string;
   productId: string;
   priceInCents: number;
+  basePriceInCents?: number;
+  isAnOffer?: boolean | null;
   attributes: VariantAttribute[];
 };

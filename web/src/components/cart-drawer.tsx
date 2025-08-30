@@ -60,18 +60,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
           <main className="flex-1 overflow-auto px-6 py-4">
             {cartData.length >= 1 ? (
-              cartData?.map((item: CartItemType) => {
-                return (
-                  <CartItem
-                    key={item.id}
-                    id={item.id}
-                    imageUrl={item.images[0].url}
-                    title={item.title}
-                    price={item.priceInCents / 100}
-                    slug={item.slug}
-                    quantity={item.quantity}
-                  />
-                );
+              cartData?.map((item: CartItemType, index: number) => {
+                return <CartItem key={index} itemIndex={index} data={item} />;
               })
             ) : (
               <div className="flex flex-col h-full items-center justify-center gap-4">

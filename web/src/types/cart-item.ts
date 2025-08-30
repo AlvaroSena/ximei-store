@@ -1,6 +1,10 @@
-import type { Product } from "../types/product";
-
-export type CartItem = Product & {
+export type CartItem = {
+  productId: string;
+  imageUrl: string;
+  title: string;
+  slug: string;
+  priceInCents: number;
   quantity: number;
   totalPriceInCents: number;
+  variantId: string | null;
 };

@@ -3,7 +3,7 @@ import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 
 type VariantAttribute = {
   attributeName: string;
-  attributeValue: string;
+  attributeValues: string[];
 };
 
 interface CreateVariantAttributesRequest {
@@ -24,12 +24,12 @@ export class CreateVariantAttributes {
     }
 
     await Promise.all(
-      attributes.map(({ attributeName, attributeValue }) =>
+      attributes.map(({ attributeName, attributeValues }) =>
         prisma.variantAttribute.create({
           data: {
             variantId,
             attributeName,
-            attributeValue,
+            attributeValues,
           },
         })
       )

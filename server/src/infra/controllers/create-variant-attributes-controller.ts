@@ -12,7 +12,7 @@ export class CreateVariantAttributesController {
       attributes: z.array(
         z.object({
           attributeName: z.string(),
-          attributeValue: z.string(),
+          attributeValues: z.array(z.string()),
         })
       ),
     });
