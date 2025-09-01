@@ -10,23 +10,32 @@ export class CreateProductController {
       price: z.number(),
       brand: z.string(),
       categoryId: z.uuid(),
+      variants: z.array(
+        z.object({
+          title: z.string(),
+          price: z.number(),
+          basePrice: z.number().optional(),
+          isAnOffer: z.boolean(),
+        })
+      ),
     });
 
     try {
-      const { title, description, price, brand, categoryId } =
+      const { title, description, price, brand, categoryId, variants } =
         createProductRequestBody.parse(request.body);
 
       const createProduct = new CreateProduct();
 
-      await createProduct.execute({
+      const { productId } = await createProduct.execute({
         title,
         description,
         price,
         brand,
         categoryId,
+        variants,
       });
 
-      return reply.status(201).send();
+      return reply.status(201).send({ productId });
     } catch (err) {
       next(err);
     }

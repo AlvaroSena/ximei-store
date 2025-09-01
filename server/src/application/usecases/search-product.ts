@@ -1,5 +1,4 @@
 import { prisma } from "../../infra/prisma";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 
 interface SearchProductProps {
   query: string;
@@ -15,7 +14,7 @@ export class SearchProduct {
         },
       },
       include: {
-        images: true,
+        variants: true,
       },
       take: 25,
       orderBy: { title: "asc" },

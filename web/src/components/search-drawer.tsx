@@ -12,6 +12,10 @@ type SearchDrawerProps = {
   onClose: () => void;
 };
 
+type SearchProductsResponse = {
+  products: Product[];
+};
+
 export default function SearchDrawer({ isOpen, onClose }: SearchDrawerProps) {
   const [query, setQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -24,7 +28,7 @@ export default function SearchDrawer({ isOpen, onClose }: SearchDrawerProps) {
     return () => clearTimeout(timer);
   }, [query]);
 
-  const { data, isFetching } = useQuery({
+  const { data, isFetching } = useQuery<SearchProductsResponse>({
     queryKey: ["filteredProducts", debouncedSearch],
     queryFn: async () => await searchProducts(debouncedSearch),
     enabled: !!debouncedSearch,
@@ -97,9 +101,9 @@ export default function SearchDrawer({ isOpen, onClose }: SearchDrawerProps) {
                         href={`/${product.slug}`}
                         className="flex flex-row gap-5"
                       >
-                        {product.images.length >= 1 ? (
+                        {product.imageUrls.length >= 1 ? (
                           <img
-                            src={product.images[0].url}
+                            src={product.imageUrls[0]}
                             alt={product.title}
                             className="size-36 object-cover"
                           />

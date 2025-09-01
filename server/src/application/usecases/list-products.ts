@@ -13,8 +13,6 @@ export class ListProducts {
 
     const cacheKey = `products:page:${page}:perPage:${perPage}`;
 
-    console.log(cacheKey);
-
     const cachedProducts = await redis.get(cacheKey);
 
     if (cachedProducts) {
@@ -25,9 +23,6 @@ export class ListProducts {
       prisma.product.findMany({
         skip,
         take,
-        include: {
-          images: true,
-        },
       }),
       prisma.product.count(),
     ]);

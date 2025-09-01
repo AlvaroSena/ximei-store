@@ -1,13 +1,14 @@
-import type { Image } from "./image";
+import type { Variant } from "./variant";
 
 export type Product = {
   id: string;
+  imageUrls: string[];
   title: string;
+  priceInCents: number;
   description: string;
   slug: string;
-  priceInCents: number;
   brand: string;
   categoryId: string;
   createdAt: Date;
-  images: Image[];
+  variants?: Variant[];
 };

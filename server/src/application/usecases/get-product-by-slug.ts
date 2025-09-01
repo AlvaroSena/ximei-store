@@ -3,21 +3,46 @@ import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 
 interface GetProductRequest {
   slug: string;
+  variantSlug?: string;
 }
 
 export class GetProductBySlug {
-  async execute({ slug }: GetProductRequest) {
-    const product = await prisma.product.findUnique({
+  async execute({ slug, variantSlug }: GetProductRequest) {
+    let product = await prisma.product.findUnique({
       where: {
         slug,
       },
       include: {
-        images: true,
+        variants: {
+          include: {
+            attributes: true,
+          },
+        },
       },
     });
 
     if (!product) {
       throw new ResourceNotFoundError("Product not found");
+    }
+
+    if (variantSlug) {
+      const variant = product.variants.find(
+        (variant) => variant.slug === variantSlug
+      );
+
+      return {
+        product: {
+          id: product.id,
+          imageUrls: product.imageUrls,
+          title: product.title,
+          description: product.description,
+          slug: product.slug,
+          brand: product.brand,
+          categoryId: product.categoryId,
+          createdAt: product.createdAt,
+          variant,
+        },
+      };
     }
 
     return {

@@ -6,16 +6,24 @@ export class CreateCategoryController {
   async handle(request: Request, reply: Response, next: NextFunction) {
     const createCategoryRequestBody = z.object({
       title: z.string(),
+      description: z.string().optional(),
     });
 
     try {
-      const { title } = createCategoryRequestBody.parse(request.body);
+      const { title, description } = createCategoryRequestBody.parse(
+        request.body
+      );
 
       const createCategory = new CreateCategory();
 
-      await createCategory.execute({ title });
+      const { categoryId } = await createCategory.execute({
+        title,
+        description,
+      });
 
-      return reply.status(201).send();
+      return reply.status(201).json({
+        categoryId,
+      });
     } catch (err) {
       next(err);
     }

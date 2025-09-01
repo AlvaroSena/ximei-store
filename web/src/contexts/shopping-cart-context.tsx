@@ -8,7 +8,7 @@ interface ShoppingCartContextProviderProps {
 
 interface ShoppingCartContextProps {
   addToCart: (item: CartItem) => any;
-  deleteFromCart: (itemId: string) => void;
+  deleteFromCart: (itemIndex: number) => void;
   cleanCart: () => void;
   finalizeOrder: () => void;
   cart: CartItem[];
@@ -37,12 +37,13 @@ export function ShoppingCartContextProvider({
 
   function addToCart(item: CartItem) {
     const itemAlreadyExists = cart.find(
-      (cartItem: CartItem) => cartItem.id === item.id
+      (cartItem: CartItem) => cartItem.productId === item.productId
     );
 
-    if (itemAlreadyExists) {
+    if (itemAlreadyExists && itemAlreadyExists.variantId === item.variantId) {
       const itemAlreadyExistsIndex = cart.findIndex(
-        (cartItem: CartItem) => cartItem.id === itemAlreadyExists.id
+        (cartItem: CartItem) =>
+          cartItem.productId === itemAlreadyExists.productId
       );
 
       cart.splice(itemAlreadyExistsIndex, 1);
@@ -58,20 +59,7 @@ export function ShoppingCartContextProvider({
     return setCart([...cart, item]);
   }
 
-  function deleteFromCart(itemId: string) {
-    const item = cart.find((cartItem: CartItem) => cartItem.id === itemId);
-
-    if (item === null) {
-      console.error("Item not found");
-      return;
-    }
-
-    const itemIndex = cart.findIndex(
-      (cartItem: CartItem) => cartItem.id === item?.id
-    );
-
-    console.log(itemIndex);
-
+  function deleteFromCart(itemIndex: number) {
     if (itemIndex === null) {
       console.error("Item idx not found");
       return;

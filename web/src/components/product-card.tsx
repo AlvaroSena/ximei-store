@@ -1,28 +1,24 @@
-import { useState, useEffect, useContext } from "react";
-import { PlusIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
+// import { PlusIcon } from "@heroicons/react/24/outline";
 import { EmptyImage } from "./empty-imagem";
-import { ShoppingCartContext } from "../contexts/shopping-cart-context";
 import type { Product } from "../types/product";
-import type { Image } from "../types/image";
 
 type ProductCardProps = {
-  images: Image[];
   product: Product;
 };
 
-export function ProductCard({ images, product }: ProductCardProps) {
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const [currentImage, setCurrentImage] = useState(images[0]?.url);
-  const { addToCart } = useContext(ShoppingCartContext);
+export function ProductCard({ product }: ProductCardProps) {
+  // const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [currentImage, setCurrentImage] = useState(product.imageUrls[0]);
 
-  useEffect(() => {
-    function handleResize() {
-      setIsMobile(window.innerWidth <= 768);
-    }
-    window.addEventListener("resize", handleResize);
+  // useEffect(() => {
+  //   function handleResize() {
+  //     setIsMobile(window.innerWidth <= 768);
+  //   }
+  //   window.addEventListener("resize", handleResize);
 
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, []);
 
   return (
     <a
@@ -38,38 +34,41 @@ export function ProductCard({ images, product }: ProductCardProps) {
             alt="Imagem da Bolsa deste produto"
             className="w-full h-full object-cover"
             onMouseEnter={() =>
-              images.length > 1 && setCurrentImage(images[1].url)
+              product.imageUrls.length > 1 &&
+              setCurrentImage(product.imageUrls[1])
             }
-            onMouseLeave={() => setCurrentImage(images[0].url)}
+            onMouseLeave={() => setCurrentImage(product.imageUrls[0])}
           />
         )}
 
-        {/* Botão com animação de surgimento */}
-        <button
-          className={`text-white bg-red-900 px-4 py-3 absolute bottom-0 hover:opacity-90 ${
+        <div
+          className={`text-white text-center bg-red-900 px-4 py-3 absolute bottom-0 hover:opacity-90 w-full`}
+        >
+          Ver item
+        </div>
+
+        {/* <div
+          className={`text-white text-center bg-red-900 px-4 py-3 absolute bottom-0 hover:opacity-90 ${
             isMobile
               ? "w-auto"
               : "w-full opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 absolute bottom-0 transition-all duration-300 ease-out"
           }`}
-          onClick={() =>
-            addToCart({
-              ...product,
-              quantity: 1,
-              totalPriceInCents: product.priceInCents * 1,
-            })
-          }
         >
-          {isMobile ? (
-            <PlusIcon className="size-5 text-white" />
-          ) : (
-            "Adicionar ao carrinho"
-          )}
-        </button>
+          {isMobile ? <PlusIcon className="size-5 text-white" /> : "Ver item"}
+        </div> */}
       </div>
 
       <div className="flex flex-col items-center">
-        <p>{product.title}</p>
-        <span className="block">
+        {/* <p>{product.title}</p> */}
+        {/* {product.variants && product.variants[1].basePriceInCents && (
+          <span className="block line-through text-stone-600 text-sm mt-3">
+            {Intl.NumberFormat("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            }).format((product.variants[1].basePriceInCents * 2) / 100)}
+          </span>
+        )} */}
+        <span className="block mt-3">
           {Intl.NumberFormat("pt-BR", {
             style: "currency",
             currency: "BRL",

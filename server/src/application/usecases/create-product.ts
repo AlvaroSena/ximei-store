@@ -2,12 +2,24 @@ import { prisma } from "../../infra/prisma";
 import { slugify } from "../../utils/slugify";
 import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 
+type CreateVariantType = {
+  title: string;
+  price: number;
+  basePrice?: number;
+  isAnOffer?: boolean;
+};
+
 interface CreateProductRequest {
   title: string;
   description?: string;
   price: number;
   brand: string;
   categoryId: string;
+  variants: CreateVariantType[];
+}
+
+interface CreateProductResponse {
+  productId: string;
 }
 
 export class CreateProduct {
@@ -17,7 +29,8 @@ export class CreateProduct {
     price,
     brand,
     categoryId,
-  }: CreateProductRequest) {
+    variants,
+  }: CreateProductRequest): Promise<CreateProductResponse> {
     const category = await prisma.category.findUnique({
       where: {
         id: categoryId,
@@ -28,7 +41,7 @@ export class CreateProduct {
       throw new ResourceNotFoundError("Category not found");
     }
 
-    await prisma.product.create({
+    const product = await prisma.product.create({
       data: {
         title,
         description,
@@ -38,5 +51,24 @@ export class CreateProduct {
         categoryId: category.id,
       },
     });
+
+    await Promise.all(
+      variants.map(({ title, price, basePrice, isAnOffer }) =>
+        prisma.variant.create({
+          data: {
+            title,
+            productId: product.id,
+            priceInCents: price * 100,
+            slug: slugify(title),
+            basePriceInCents: basePrice && basePrice * 100,
+            isAnOffer,
+          },
+        })
+      )
+    );
+
+    return {
+      productId: product.id,
+    };
   }
 }
