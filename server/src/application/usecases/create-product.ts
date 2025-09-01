@@ -2,7 +2,7 @@ import { prisma } from "../../infra/prisma";
 import { slugify } from "../../utils/slugify";
 import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 
-type Variant = {
+type CreateVariantType = {
   title: string;
   price: number;
   basePrice?: number;
@@ -15,7 +15,7 @@ interface CreateProductRequest {
   price: number;
   brand: string;
   categoryId: string;
-  variants: Variant[];
+  variants: CreateVariantType[];
 }
 
 interface CreateProductResponse {

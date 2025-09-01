@@ -13,8 +13,6 @@ export class ListProducts {
 
     const cacheKey = `products:page:${page}:perPage:${perPage}`;
 
-    console.log(cacheKey);
-
     const cachedProducts = await redis.get(cacheKey);
 
     if (cachedProducts) {

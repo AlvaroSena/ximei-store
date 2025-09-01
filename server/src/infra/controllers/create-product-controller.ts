@@ -14,6 +14,8 @@ export class CreateProductController {
         z.object({
           title: z.string(),
           price: z.number(),
+          basePrice: z.number().optional(),
+          isAnOffer: z.boolean(),
         })
       ),
     });
