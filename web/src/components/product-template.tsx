@@ -114,9 +114,9 @@ export function ProductTemplate({
       </div>
 
       <div className="w-full px-4 lg:px-0 flex flex-col gap-5">
-        <h1 className="text-4xl font-bold text-stone-900">
+        {/* <h1 className="text-4xl font-bold text-stone-900">
           {product.title} {currentVariant?.title}
-        </h1>
+        </h1> */}
         {currentVariant?.isAnOffer && (
           <span className="text-lg line-through font-semibold text-stone-500">
             {Intl.NumberFormat("pt-BR", {
@@ -124,7 +124,7 @@ export function ProductTemplate({
               currency: "BRL",
             }).format(
               currentVariant && currentVariant?.basePriceInCents
-                ? currentVariant.basePriceInCents / 100
+                ? (currentVariant.basePriceInCents / 100) * 2
                 : product.priceInCents / 100
             )}
           </span>
@@ -145,17 +145,19 @@ export function ProductTemplate({
           <p className="font-medium text-stone-900">Em estoque</p>
         </div>
 
-        <p className="text-neutral-900">Cor: {currentVariant?.title}</p>
+        {/* <p className="text-neutral-900 font-medium">
+          Variações: {currentVariant?.title}
+        </p> */}
         <div className="flex flex-row items-center gap-3">
           {product.variants?.map((variant: Variant) => {
             return (
               <button
                 key={variant.id}
-                className={`relative hover:outline outline-stone-300 ${
+                className={`px-4 py-3 rounded-md text-stone-900 font-medium relative hover:outline outline-stone-300 ${
                   variantNotSelected && "border border-red-500"
                 } ${
                   currentVariant?.slug === variant.slug &&
-                  "border border-stone-300 outline-none"
+                  "bg-stone-100 outline-none"
                 }`}
                 onClick={() => {
                   setSearchParams({
@@ -164,14 +166,15 @@ export function ProductTemplate({
                   setVariantNotSelected(false);
                 }}
               >
-                {variant.isAnOffer && (
+                {/* {variant.isAnOffer && (
                   <span className="absolute top-0 right-0 p-1">🔥</span>
-                )}
-                <img
+                )} */}
+                {/* <img
                   src={variant.imageUrl ?? ""}
-                  alt=""
-                  className="size-[70px]"
-                />
+                  alt="variação do produto"
+                  className="size-[70px] object-cover"
+                /> */}
+                <span>{variant.title}</span>
               </button>
             );
           })}
