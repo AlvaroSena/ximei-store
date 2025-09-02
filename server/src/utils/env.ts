@@ -5,7 +5,7 @@ const envSchema = z.object({
   REDIS_URL: z.url().optional(),
   UPSTASH_REDIS_REST_URL: z.url(),
   UPSTASH_REDIS_REST_TOKEN: z.string(),
-  AWS_ACCESS_KEY: z.string(),
+  AWS_BUCKET_ACCESS_KEY: z.string(),
   AWS_SECRET_ACCESS_KEY: z.string(),
   AWS_REGION: z.string(),
   AWS_BUCKET: z.string(),
