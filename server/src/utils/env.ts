@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const envSchema = z.object({
   DATABASE_URL: z.url(),
-  REDIS_URL: z.url(),
+  REDIS_URL: z.url().optional(),
   UPSTASH_REDIS_REST_URL: z.url(),
   UPSTASH_REDIS_REST_TOKEN: z.string(),
   AWS_ACCESS_KEY: z.string(),
