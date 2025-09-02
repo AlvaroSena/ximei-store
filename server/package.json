@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/app.ts --env-file=.env",
-    "vercel-build": "npx prisma generate && npx prisma migrate deploy"
+    "vercel-build": "npx prisma generate && npx prisma migrate deploy",
+    "seed": "tsx src/infra/prisma/seed.ts"
   },
   "keywords": [],
   "author": "",

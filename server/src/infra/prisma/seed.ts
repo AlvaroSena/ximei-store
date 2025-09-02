@@ -1,8 +1,162 @@
 import { prisma } from "./index";
 import { slugify } from "../../utils/slugify";
 
-export async function seedProducts(categoryId: string) {
-  const imageUrls = [
+export async function seedProducts(categoryId: string, imageUrls: string[]) {
+  const tamanhos = ["36", "37", "38", "39", "40", "41", "42"];
+
+  for (const url of imageUrls) {
+    const title = "Produto " + Math.random().toString(36).substring(7); // pode adaptar
+    const description = "Descrição do produto";
+    const brand = "MinhaMarca";
+
+    // Criação do produto
+    const product = await prisma.product.create({
+      data: {
+        title,
+        description,
+        brand,
+        categoryId,
+        slug: slugify(title),
+        priceInCents: 550 * 100,
+        imageUrls: [url],
+      },
+    });
+
+    // Criar primeira variant
+    const variant1Title = "1 por R$ 550,00";
+    const variant1 = await prisma.variant.create({
+      data: {
+        productId: product.id,
+        title: variant1Title,
+        priceInCents: 550 * 100,
+        slug: slugify(product.title.concat("-1-par")),
+        isAnOffer: false,
+        imageUrl: url,
+      },
+    });
+
+    await prisma.variantAttribute.create({
+      data: {
+        variantId: variant1.id,
+        attributeName: "Tamanho",
+        attributeValues: tamanhos,
+      },
+    });
+
+    // Criar segunda variant
+    const variant2Title = "2 por R$ 899,99";
+    const variant2 = await prisma.variant.create({
+      data: {
+        productId: product.id,
+        title: variant2Title,
+        priceInCents: Math.round(899.99 * 100),
+        basePriceInCents: 550 * 100,
+        slug: slugify(product.title.concat("-2-pares")),
+        isAnOffer: true,
+        imageUrl: url,
+      },
+    });
+
+    await prisma.variantAttribute.createMany({
+      data: [
+        {
+          variantId: variant2.id,
+          attributeName: "Tamanho 1º par",
+          attributeValues: tamanhos,
+        },
+        {
+          variantId: variant2.id,
+          attributeName: "Tamanho 2º par",
+          attributeValues: tamanhos,
+        },
+      ],
+    });
+  }
+}
+
+// Para rodar diretamente
+async function main() {
+  const sneakersCategoryId = "6296b3ca-d8c8-45e0-a4c8-dd92c5b12bea";
+  const heelsCategoryId = "5a9e1e79-5ffb-4580-bf33-2a93c9500425";
+  // const sandelsCategoryId = "a1117c4e-3cc9-487e-b7d2-fea19a3bd223";
+
+  const sneakersImageUrls = [
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-1.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-2.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-3.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-4.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-5.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-6.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-7.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-8.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-9.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-10.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-11.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-12.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-13.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-14.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-15.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-16.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-17.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-18.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-19.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-20.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-21.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-22.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-23.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-24.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-25.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-26.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-27.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-28.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-29.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-30.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-31.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-32.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-33.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-34.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-35.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-36.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-37.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-38.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-39.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-40.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-41.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-42.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-43.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-44.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-45.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-46.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-47.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-48.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-49.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-50.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-51.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-52.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-53.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-54.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-55.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-56.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-57.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-58.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-59.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-60.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-61.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-62.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-63.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-64.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-65.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-66.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-67.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-68.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-69.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-70.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-71.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-72.JPG",
+    "https://ximei-store.s3.sa-east-1.amazonaws.com/tenis/tenis-73.JPG",
+  ];
+
+  const heelsImageUrls = [
     "https://ximei-store.s3.sa-east-1.amazonaws.com/saltos/salto-1.JPG",
     "https://ximei-store.s3.sa-east-1.amazonaws.com/saltos/salto-2.JPG",
     "https://ximei-store.s3.sa-east-1.amazonaws.com/saltos/salto-3.JPG",
@@ -105,82 +259,11 @@ export async function seedProducts(categoryId: string) {
     "https://ximei-store.s3.sa-east-1.amazonaws.com/saltos/salto-100.JPG",
   ];
 
-  const tamanhos = ["36", "37", "38", "39", "40", "41", "42"];
+  await Promise.all([
+    await seedProducts(sneakersCategoryId, sneakersImageUrls),
+    await seedProducts(heelsCategoryId, heelsImageUrls),
+  ]);
 
-  for (const url of imageUrls) {
-    const title = "Produto " + Math.random().toString(36).substring(7); // pode adaptar
-    const description = "Descrição do produto";
-    const brand = "MinhaMarca";
-
-    // Criação do produto
-    const product = await prisma.product.create({
-      data: {
-        title,
-        description,
-        brand,
-        categoryId,
-        slug: slugify(title),
-        priceInCents: 550 * 100,
-        imageUrls: [url],
-      },
-    });
-
-    // Criar primeira variant
-    const variant1Title = "1 por R$ 550,00";
-    const variant1 = await prisma.variant.create({
-      data: {
-        productId: product.id,
-        title: variant1Title,
-        priceInCents: 550 * 100,
-        slug: slugify(product.title.concat("-1-par")),
-        isAnOffer: false,
-        imageUrl: url,
-      },
-    });
-
-    await prisma.variantAttribute.create({
-      data: {
-        variantId: variant1.id,
-        attributeName: "Tamanho",
-        attributeValues: tamanhos,
-      },
-    });
-
-    // Criar segunda variant
-    const variant2Title = "2 por R$ 899,99";
-    const variant2 = await prisma.variant.create({
-      data: {
-        productId: product.id,
-        title: variant2Title,
-        priceInCents: Math.round(899.99 * 100),
-        basePriceInCents: 550 * 100,
-        slug: slugify(product.title.concat("-2-pares")),
-        isAnOffer: true,
-        imageUrl: url,
-      },
-    });
-
-    await prisma.variantAttribute.createMany({
-      data: [
-        {
-          variantId: variant2.id,
-          attributeName: "Tamanho 1º par",
-          attributeValues: tamanhos,
-        },
-        {
-          variantId: variant2.id,
-          attributeName: "Tamanho 2º par",
-          attributeValues: tamanhos,
-        },
-      ],
-    });
-  }
-}
-
-// Para rodar diretamente
-async function main() {
-  const categoryId = "5a9e1e79-5ffb-4580-bf33-2a93c9500425"; // <- você passa esse valor
-  await seedProducts(categoryId);
   console.log("Seed concluído!");
 }
 
