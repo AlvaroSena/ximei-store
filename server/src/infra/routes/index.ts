@@ -16,11 +16,14 @@ import { ListProductVariantsController } from "../controllers/list-product-varia
 import { CreateProductVariantController } from "../controllers/create-product-variant-controller";
 import { UpdateProductVariantController } from "../controllers/update-product-variant-controller";
 import { DeleteProductVariantController } from "../controllers/delete-product-variant-controller";
+import { ListFeaturedCategoriesController } from "../controllers/list-featured-categories-controller";
+import { ListProductsByCategoryController } from "../controllers/list-products-by-category-controller";
 
 export const routes = Router();
 
 const createCategoryController = new CreateCategoryController();
 const listCategoriesController = new ListCategoriesController();
+const listFeaturedCategoriesController = new ListFeaturedCategoriesController();
 const updateCategoryController = new UpdateCategoryController();
 const getCategoryController = new GetCategoryController();
 const deleteCategoryController = new DeleteCategoryController();
@@ -32,6 +35,7 @@ const getProductController = new GetProductController();
 const deleteProductController = new DeleteProductController();
 const getProductBySlugController = new GetProductBySlugController();
 const searchProductController = new SearchProductController();
+const listProductsByCategoryController = new ListProductsByCategoryController();
 
 const createProductVariantsController = new CreateProductVariantController();
 const listProductVariantsController = new ListProductVariantsController();
@@ -42,6 +46,7 @@ const createVariantAttributes = new CreateVariantAttributesController();
 
 routes.post("/v1/categories", createCategoryController.handle);
 routes.get("/v1/categories", listCategoriesController.handle);
+routes.get("/v1/categories/featured", listFeaturedCategoriesController.handle);
 routes.put("/v1/categories/update/:id", updateCategoryController.handle);
 routes.get("/v1/categories/:id", getCategoryController.handle);
 routes.delete("/v1/categories/delete/:id", deleteCategoryController.handle);
@@ -53,6 +58,10 @@ routes.get("/v1/products/:id", getProductController.handle);
 routes.delete("/v1/products/delete/:id", deleteProductController.handle);
 routes.get("/v1/products/q/:slug", getProductBySlugController.handle);
 routes.get("/v1/products/search/filter", searchProductController.handle);
+routes.get(
+  "/v1/products/categories/:categorySlug",
+  listProductsByCategoryController.handle
+);
 
 routes.post(
   "/v1/variants/product/:productId",

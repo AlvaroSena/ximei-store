@@ -17,10 +17,10 @@ export class ListProductsLocal {
 
     const cachedProducts = await redis.get(cacheKey);
 
-    if (cachedProducts) {
-      console.log("DEV: cache hit");
-      return JSON.parse(cachedProducts);
-    }
+    // if (cachedProducts) {
+    //   console.log("DEV: cache hit");
+    //   return JSON.parse(cachedProducts);
+    // }
 
     const [products, totalProducts] = await Promise.all([
       prisma.product.findMany({

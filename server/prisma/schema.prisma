@@ -10,8 +10,10 @@ datasource db {
 model Category {
   id          String    @id @default(uuid())
   title       String
+  imageUrl    String?
   description String?
   slug        String    @unique
+  isFeatured  Boolean   @default(false)
   products    Product[]
   createdAt   DateTime  @default(now()) @map("created_at")
 

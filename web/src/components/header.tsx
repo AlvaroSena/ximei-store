@@ -36,7 +36,7 @@ export function Header() {
   return (
     <>
       <div className="bg-red-900 w-full text-white text-center text-sm py-3">
-        Frete gratis em todo o Brasil
+        🇧🇷 Envio para todo o Brasil
       </div>
       <header className="px-4 lg:p-0 sticky top-0 z-50 shadow-sm bg-white w-full h-24 text-xl text-stone-900 font-semibold">
         <div className="max-w-[1120px] mx-auto h-20 flex flex-row justify-between items-center">

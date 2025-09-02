@@ -38,3 +38,42 @@ export async function searchProducts(query: string) {
     console.log(err);
   }
 }
+
+export async function getFeaturedProducts() {
+  try {
+    const response = await api.get("/products/categories/featured-products");
+    const data = response.data;
+
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function getProductsByCategory(
+  slug: string,
+  page: number,
+  perPage: number
+) {
+  try {
+    const response = await api.get(
+      `/products/categories/${slug}?page=${page}&perPage=${perPage}`
+    );
+    const data = response.data;
+
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function getFeaturedCategories() {
+  try {
+    const response = await api.get("/categories/featured");
+    const data = response.data;
+
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+}
