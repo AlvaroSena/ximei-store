@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { z } from "zod";
 import { UpdateProductVariant } from "../../application/usecases/update-product-variant";
+import { z } from "zod";
 
 export class UpdateProductVariantController {
   async handle(request: Request, reply: Response, next: NextFunction) {
