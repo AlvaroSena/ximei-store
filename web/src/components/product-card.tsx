@@ -22,10 +22,10 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <a
-      href={`/${product.slug}`}
+      href={`/products/${product.slug}`}
       className="block w-full max-w-72 text-stone-900 font-semibold text-lg"
     >
-      <div className="h-72 w-full relative group">
+      <div className="h-96 w-full relative group">
         {!currentImage ? (
           <EmptyImage />
         ) : (
