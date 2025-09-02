@@ -7,9 +7,7 @@ import { Title, Link, Meta } from "react-head";
 
 export function Catalog() {
   const location = useLocation();
-
   const queryParams = new URLSearchParams(location.search);
-
   const page = queryParams.get("page") as string;
 
   const { data, isPending, error } = useQuery({
