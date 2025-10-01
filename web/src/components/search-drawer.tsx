@@ -6,6 +6,7 @@ import { searchProducts } from "../lib/api";
 import { EmptyImage } from "./empty-imagem";
 import { LoaderCircle } from "lucide-react";
 import type { Product } from "../types/product";
+import { Link } from "react-router-dom";
 
 type SearchDrawerProps = {
   isOpen: boolean;
@@ -38,9 +39,7 @@ export default function SearchDrawer({ isOpen, onClose }: SearchDrawerProps) {
     <div
       aria-hidden={!isOpen}
       className={`fixed inset-0 z-50 transition-opacity duration-300 ${
-        isOpen
-          ? "pointer-events-auto opacity-100"
-          : "pointer-events-none opacity-0"
+        isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
       }`}
     >
       <div
@@ -59,14 +58,8 @@ export default function SearchDrawer({ isOpen, onClose }: SearchDrawerProps) {
         <div className="flex h-full flex-col">
           <header className="flex items-center justify-between px-6 py-4">
             <h2 className="text-lg font-bold text-stone-900">PESQUISE</h2>
-            <button
-              aria-label="Fechar carrinho"
-              onClick={onClose}
-              className="p-2 transition"
-            >
-              <XMarkIcon
-                className={`size-6 text-stone-900 transition hover:opacity-50`}
-              />
+            <button aria-label="Fechar carrinho" onClick={onClose} className="p-2 transition">
+              <XMarkIcon className={`size-6 text-stone-900 transition hover:opacity-50`} />
             </button>
           </header>
 
@@ -96,17 +89,9 @@ export default function SearchDrawer({ isOpen, onClose }: SearchDrawerProps) {
                 <React.Fragment>
                   {data?.products.map((product: Product) => {
                     return (
-                      <a
-                        key={product.id}
-                        href={`/${product.slug}`}
-                        className="flex flex-row gap-5"
-                      >
+                      <Link key={product.id} to={`/products/${product.slug}`} className="flex flex-row gap-5">
                         {product.imageUrls.length >= 1 ? (
-                          <img
-                            src={product.imageUrls[0]}
-                            alt={product.title}
-                            className="size-36 object-cover"
-                          />
+                          <img src={product.imageUrls[0]} alt={product.title} className="size-36 object-cover" />
                         ) : (
                           <div className="size-36">
                             <EmptyImage />
@@ -114,9 +99,7 @@ export default function SearchDrawer({ isOpen, onClose }: SearchDrawerProps) {
                         )}
 
                         <div className="flex flex-col gap-3">
-                          <p className="font-semibold w-48 truncate">
-                            {product.title}
-                          </p>
+                          <p className="font-semibold w-48 truncate">{product.title}</p>
                           <span className="block text-sm text-stone-900">
                             {Intl.NumberFormat("pt-BR", {
                               style: "currency",
@@ -124,7 +107,7 @@ export default function SearchDrawer({ isOpen, onClose }: SearchDrawerProps) {
                             }).format(product.priceInCents / 100)}
                           </span>
                         </div>
-                      </a>
+                      </Link>
                     );
                   })}
                 </React.Fragment>

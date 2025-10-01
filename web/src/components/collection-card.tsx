@@ -1,5 +1,6 @@
 import { EmptyImage } from "./empty-imagem";
 import type { Category } from "../types/category";
+import { Link } from "react-router-dom";
 
 type CollectionCardProps = {
   category: Category;
@@ -8,8 +9,8 @@ type CollectionCardProps = {
 
 export function CollectionCard({ category, index }: CollectionCardProps) {
   return (
-    <a
-      href={`/${category.slug}`}
+    <Link
+      to={`/${category.slug}`}
       className={`relative group min-w-[90%] sm:min-w-[40%] lg:min-w-[30%] snap-center overflow-hidden cursor-pointer text-white ${
         index === 2 ? "col-span-2" : ""
       }`}
@@ -28,10 +29,8 @@ export function CollectionCard({ category, index }: CollectionCardProps) {
 
       <div className="absolute w-full bottom-0 text-center p-6 ">
         <h1 className="text-3xl font-bold">{category.title}</h1>
-        <h2 className="text-lg font-medium text-center">
-          {category.description}
-        </h2>
+        <h2 className="text-lg font-medium text-center">{category.description}</h2>
       </div>
-    </a>
+    </Link>
   );
 }

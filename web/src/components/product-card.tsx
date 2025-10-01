@@ -2,6 +2,7 @@ import { useState } from "react";
 // import { PlusIcon } from "@heroicons/react/24/outline";
 import { EmptyImage } from "./empty-imagem";
 import type { Product } from "../types/product";
+import { Link } from "react-router-dom";
 
 type ProductCardProps = {
   product: Product;
@@ -21,10 +22,7 @@ export function ProductCard({ product }: ProductCardProps) {
   // }, []);
 
   return (
-    <a
-      href={`/products/${product.slug}`}
-      className="block w-full max-w-72 text-stone-900 font-semibold text-lg"
-    >
+    <Link to={`/products/${product.slug}`} className="block w-full max-w-72 text-stone-900 font-semibold text-lg">
       <div className="h-96 w-full relative group">
         {!currentImage ? (
           <EmptyImage />
@@ -33,17 +31,12 @@ export function ProductCard({ product }: ProductCardProps) {
             src={currentImage}
             alt="Imagem da Bolsa deste produto"
             className="w-full h-full object-cover"
-            onMouseEnter={() =>
-              product.imageUrls.length > 1 &&
-              setCurrentImage(product.imageUrls[1])
-            }
+            onMouseEnter={() => product.imageUrls.length > 1 && setCurrentImage(product.imageUrls[1])}
             onMouseLeave={() => setCurrentImage(product.imageUrls[0])}
           />
         )}
 
-        <div
-          className={`text-white text-center bg-red-900 px-4 py-3 absolute bottom-0 hover:opacity-90 w-full`}
-        >
+        <div className={`text-white text-center bg-red-900 px-4 py-3 absolute bottom-0 hover:opacity-90 w-full`}>
           Ver item
         </div>
 
@@ -75,6 +68,6 @@ export function ProductCard({ product }: ProductCardProps) {
           }).format(product.priceInCents / 100)}
         </span>
       </div>
-    </a>
+    </Link>
   );
 }

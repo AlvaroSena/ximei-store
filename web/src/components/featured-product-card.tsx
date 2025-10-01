@@ -1,5 +1,6 @@
 import { EmptyImage } from "./empty-imagem";
 import type { Product } from "../types/product";
+import { Link } from "react-router-dom";
 
 type FeaturedProductCardProps = {
   product: Product;
@@ -8,8 +9,8 @@ type FeaturedProductCardProps = {
 
 export function FeaturedProductCard({ product }: FeaturedProductCardProps) {
   return (
-    <a
-      href={`/products/${product.slug}`}
+    <Link
+      to={`/products/${product.slug}`}
       className={`relative group min-w-[90%] sm:min-w-[40%] lg:min-w-[30%] snap-center overflow-hidden cursor-pointer text-white`}
     >
       {product.imageUrls.length < 1 ? (
@@ -30,6 +31,6 @@ export function FeaturedProductCard({ product }: FeaturedProductCardProps) {
           {product.description}
         </h2> */}
       </div>
-    </a>
+    </Link>
   );
 }

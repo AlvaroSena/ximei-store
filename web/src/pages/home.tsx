@@ -36,9 +36,7 @@ export function Home() {
   if (errorProducts || errorCategories) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <h3 className="text-xl font-semibold text-stone-900">
-          Nenhum produto foi encontrado.
-        </h3>
+        <h3 className="text-xl font-semibold text-stone-900">Nenhum produto foi encontrado.</h3>
       </div>
     );
   }

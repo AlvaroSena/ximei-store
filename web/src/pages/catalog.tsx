@@ -10,10 +10,19 @@ export function Catalog() {
   const queryParams = new URLSearchParams(location.search);
   const page = queryParams.get("page") as string;
 
-  const { data, isPending, error } = useQuery({
-    queryKey: ["products"],
+  const { data, isPending, error, isFetching } = useQuery({
+    queryKey: ["products", page],
     queryFn: async () => await getProducts(parseInt(page || "1"), 25),
+    placeholderData: (prev) => prev,
   });
+
+  if (isFetching) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <LoaderCircle className="animate-spin text-red-900 size-10" />
+      </div>
+    );
+  }
 
   if (isPending) {
     return (
@@ -26,9 +35,7 @@ export function Catalog() {
   if (error) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <h3 className="text-xl font-semibold text-stone-900">
-          Nenhum produto foi encontrado.
-        </h3>
+        <h3 className="text-xl font-semibold text-stone-900">Nenhum produto foi encontrado.</h3>
       </div>
     );
   }
@@ -37,10 +44,7 @@ export function Catalog() {
     <div>
       <Title>Catálogo | Loja Ximei</Title>
       <Link rel="canonical" href="https://ximei.vercel.app/catalogo" />
-      <Meta
-        name="description"
-        content="Veja todas as bolsas disponíveis no catálogo da Ximei."
-      />
+      <Meta name="description" content="Veja todas as bolsas disponíveis no catálogo da Ximei." />
 
       <div className="max-w-[1120px] mx-auto">
         <div className="bg-neutral-200 flex flex-col items-center justify-center h-64 gap-6">
