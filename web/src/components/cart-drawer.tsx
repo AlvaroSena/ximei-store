@@ -4,6 +4,8 @@ import { ShoppingCartContext } from "../contexts/shopping-cart-context";
 import { CartItem } from "./cart-item";
 import { LoaderCircle } from "lucide-react";
 import type { CartItem as CartItemType } from "../types/cart-item";
+import whatsappIcon from "../assets/64px-WhatsApp.svg.png";
+import { generateOrderMessage } from "../utils/generate-order-message";
 
 type CartDrawerProps = {
   isOpen: boolean;
@@ -12,6 +14,8 @@ type CartDrawerProps = {
 
 export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   const [isSendingOrder, setIsSendingOrder] = useState(false);
+  const [isOrderFilled, setIsOrderFilled] = useState(false);
+  const [orderMessage, setOrderMessage] = useState("");
   const { cart, finalizeOrder } = useContext(ShoppingCartContext);
   const [cartData, setCartData] = useState<any>([]);
   let total = 0;
@@ -28,8 +32,15 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
     setIsSendingOrder(true);
 
     setTimeout(async () => {
-      await finalizeOrder();
+      const orderId = await finalizeOrder();
       setIsSendingOrder(false);
+
+      if (orderId) {
+        const encodedMessage = generateOrderMessage(orderId);
+        setOrderMessage(encodedMessage);
+
+        setIsOrderFilled(true);
+      }
     }, 1500);
   }
 
@@ -61,59 +72,75 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             </button>
           </header>
 
-          <main className="flex-1 overflow-auto px-6 py-4">
-            {cartData.length >= 1 ? (
-              cartData?.map((item: CartItemType, index: number) => {
-                return <CartItem key={index} itemIndex={index} data={item} />;
-              })
-            ) : (
-              <div className="flex flex-col h-full items-center justify-center gap-4">
-                <p className="text-red-950 font-semibold text-2xl">Seu carrinho está vazio</p>
-                <a
-                  href="/catalog"
-                  className=" bg-red-900 text-white text-lg py-4 px-6 font-medium transition hover:opacity-90"
-                >
-                  COMEÇAR A COMPRAR
-                </a>
-              </div>
-            )}
-          </main>
-
-          {cart.length >= 1 && (
-            <footer className="border-t border-neutral-200 px-6 py-4">
-              <div className="flex items-center justify-between mb-3">
-                <p className="text-xl text-red-950">Total</p>
-                <p className="text-xl font-semibold text-red-950">
-                  {Intl.NumberFormat("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                  }).format(total / 100)}
-                </p>
-              </div>
-
-              <div className="w-full flex flex-row items-center gap-4">
-                {/* <button
-                onClick={onClose}
-                className="w-full border border-red-900 px-6 py-4 font-medium text-lg transition hover:bg-red-900 hover:text-white"
+          {isOrderFilled ? (
+            <div className="h-full px-6 py-4 flex flex-col items-center justify-center gap-4">
+              <img src={whatsappIcon} alt="Icone do whatsapp" />
+              <a
+                href={`https://api.whatsapp.com/send?phone=${import.meta.env.VITE_PHONE_NUMBER}&text=${orderMessage}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-green-600 text-white p-4 text-sm transition hover:bg-green-700"
               >
-                IR PARA O CARRINHO
-              </button> */}
+                <span>FINALIZAR NO WHATSAPP</span>
+              </a>
+            </div>
+          ) : (
+            <>
+              <main className="flex-1 overflow-auto px-6 py-4">
+                {cartData.length >= 1 ? (
+                  cartData?.map((item: CartItemType, index: number) => {
+                    return <CartItem key={index} itemIndex={index} data={item} />;
+                  })
+                ) : (
+                  <div className="flex flex-col h-full items-center justify-center gap-4">
+                    <p className="text-red-950 font-semibold text-2xl">Seu carrinho está vazio</p>
+                    <a
+                      href="/catalog"
+                      className=" bg-red-900 text-white text-lg py-4 px-6 font-medium transition hover:opacity-90"
+                    >
+                      COMEÇAR A COMPRAR
+                    </a>
+                  </div>
+                )}
+              </main>
 
-                <button
-                  onClick={submitOrder}
-                  className="w-full flex flex-row items-center justify-center gap-2 bg-red-900 text-white text-lg py-4 px-6 font-medium transition hover:opacity-90"
-                >
-                  {isSendingOrder ? (
-                    <>
-                      <LoaderCircle className="animate-spin text-white" />
-                      FINALIZANDO...
-                    </>
-                  ) : (
-                    "FINALIZAR"
-                  )}
-                </button>
-              </div>
-            </footer>
+              {cart.length >= 1 && (
+                <footer className="border-t border-neutral-200 px-6 py-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="text-xl text-red-950">Total</p>
+                    <p className="text-xl font-semibold text-red-950">
+                      {Intl.NumberFormat("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                      }).format(total / 100)}
+                    </p>
+                  </div>
+
+                  <div className="w-full flex flex-row items-center gap-4">
+                    {/* <button
+                      onClick={onClose}
+                      className="w-full border border-red-900 px-6 py-4 font-medium text-lg transition hover:bg-red-900 hover:text-white"
+                    >
+                      IR PARA O CARRINHO
+                    </button> */}
+
+                    <button
+                      onClick={submitOrder}
+                      className="w-full flex flex-row items-center justify-center gap-2 bg-red-900 text-white text-lg py-4 px-6 font-medium transition hover:opacity-90"
+                    >
+                      {isSendingOrder ? (
+                        <>
+                          <LoaderCircle className="animate-spin text-white" />
+                          CONTINUANDO...
+                        </>
+                      ) : (
+                        "CONTINUAR"
+                      )}
+                    </button>
+                  </div>
+                </footer>
+              )}
+            </>
           )}
         </div>
       </aside>

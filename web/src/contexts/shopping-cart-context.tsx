@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState, type ReactNode } from "react";
 import { toast } from "sonner";
+import { createOrder } from "../lib/api";
 import type { CartItem } from "../types/cart-item";
-import { api } from "../lib/api";
 
 interface ShoppingCartContextProviderProps {
   children?: ReactNode;
@@ -11,7 +11,7 @@ interface ShoppingCartContextProps {
   addToCart: (item: CartItem) => any;
   deleteFromCart: (itemIndex: number) => void;
   cleanCart: () => void;
-  finalizeOrder: () => Promise<void>;
+  finalizeOrder: () => Promise<string>;
   cart: CartItem[];
 }
 
@@ -70,39 +70,11 @@ export function ShoppingCartContextProvider({ children }: ShoppingCartContextPro
   }
 
   async function finalizeOrder() {
-    try {
-      let total = cart.reduce((sum: number, item: CartItem) => sum + item.priceInCents * item.quantity, 0);
+    let total = cart.reduce((sum: number, item: CartItem) => sum + item.priceInCents * item.quantity, 0);
 
-      const response = await api.post("/orders", {
-        items: cart,
-        total,
-      });
+    const data = await createOrder({ items: cart, total });
 
-      if (response && response.data) {
-        const data = response.data;
-
-        const lines: string[] = [];
-
-        const summaryUrl = `${import.meta.env.VITE_APP_URL}/orders/${data.orderId}`;
-
-        lines.push("🛒 Quero finalizar meu pedido");
-        lines.push("");
-        lines.push("Resumo do meu pedido (clique para ver todos os itens):");
-        lines.push(`👉 ${summaryUrl}`);
-        lines.push("");
-        lines.push("✅ Confira no link acima");
-        lines.push("✅ Não precisa me pedir o modelo, já está tudo no link");
-
-        const text = lines.join("\n");
-        const encoded = encodeURIComponent(text);
-
-        const phoneNumber = import.meta.env.VITE_PHONE_NUMBER;
-        const url = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encoded}`;
-        window.open(url, "_blank");
-      }
-    } catch (err) {
-      console.log(err);
-    }
+    return data.orderId;
   }
 
   return (

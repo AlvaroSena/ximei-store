@@ -109,9 +109,9 @@ export function Header() {
             </div>
           </div>
 
-          <a href="/" className="block">
+          <Link to="/" className="block">
             <img src={logo} alt="Logo Ximei Store" className="w-[72px]" />
-          </a>
+          </Link>
 
           <div className="flex flex-row items-center gap-5">
             <button className="" onClick={() => setIsSearchDrawerOpen(true)}>

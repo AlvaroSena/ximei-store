@@ -1,4 +1,5 @@
 import axios from "axios";
+import type { CartItem } from "../types/cart-item";
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -75,6 +76,21 @@ export async function getFeaturedCategories() {
 export async function getOrder(id: string) {
   try {
     const response = await api.get(`/orders/${id}`);
+    const data = response.data;
+
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function createOrder({ items, total }: { items: CartItem[]; total: number }) {
+  try {
+    const response = await api.post("/orders", {
+      items,
+      total,
+    });
+
     const data = response.data;
 
     return data;
