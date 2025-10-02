@@ -97,7 +97,7 @@ export function ShoppingCartContextProvider({ children }: ShoppingCartContextPro
         const encoded = encodeURIComponent(text);
 
         const phoneNumber = import.meta.env.VITE_PHONE_NUMBER;
-        const url = `https://wa.me/${phoneNumber}?text=${encoded}`;
+        const url = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encoded}`;
         window.open(url, "_blank");
       }
     } catch (err) {
