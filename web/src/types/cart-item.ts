@@ -7,4 +7,5 @@ export type CartItem = {
   quantity: number;
   totalPriceInCents: number;
   variantId: string | null;
+  variantAttributesValues: any;
 };

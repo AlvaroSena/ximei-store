@@ -26,9 +26,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
     <div
       aria-hidden={!isOpen}
       className={`fixed inset-0 z-50 transition-opacity duration-300 ${
-        isOpen
-          ? "pointer-events-auto opacity-100"
-          : "pointer-events-none opacity-0"
+        isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
       }`}
     >
       <div
@@ -47,14 +45,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
         <div className="flex h-full flex-col">
           <header className="flex items-center justify-between px-6 py-4">
             <h2 className="text-lg font-bold text-stone-900">CARRINHO</h2>
-            <button
-              aria-label="Fechar carrinho"
-              onClick={onClose}
-              className="p-2 transition"
-            >
-              <XMarkIcon
-                className={`size-6 text-stone-900 transition hover:opacity-50`}
-              />
+            <button aria-label="Fechar carrinho" onClick={onClose} className="p-2 transition">
+              <XMarkIcon className={`size-6 text-stone-900 transition hover:opacity-50`} />
             </button>
           </header>
 
@@ -65,9 +57,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               })
             ) : (
               <div className="flex flex-col h-full items-center justify-center gap-4">
-                <p className="text-red-950 font-semibold text-2xl">
-                  Seu carrinho está vazio
-                </p>
+                <p className="text-red-950 font-semibold text-2xl">Seu carrinho está vazio</p>
                 <a
                   href="/catalog"
                   className=" bg-red-900 text-white text-lg py-4 px-6 font-medium transition hover:opacity-90"

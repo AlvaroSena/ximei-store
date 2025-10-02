@@ -63,3 +63,12 @@ model VariantAttribute {
 
   @@map("variant_attributes")
 }
+
+model Order {
+  id           String   @id @default(ulid())
+  items        String
+  totalInCents Int      @map("total_in_cents")
+  createdAt    DateTime @default(now())
+
+  @@map("orders")
+}

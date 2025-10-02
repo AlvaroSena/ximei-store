@@ -50,15 +50,9 @@ export async function getFeaturedProducts() {
   }
 }
 
-export async function getProductsByCategory(
-  slug: string,
-  page: number,
-  perPage: number
-) {
+export async function getProductsByCategory(slug: string, page: number, perPage: number) {
   try {
-    const response = await api.get(
-      `/products/categories/${slug}?page=${page}&perPage=${perPage}`
-    );
+    const response = await api.get(`/products/categories/${slug}?page=${page}&perPage=${perPage}`);
     const data = response.data;
 
     return data;
@@ -70,6 +64,17 @@ export async function getProductsByCategory(
 export async function getFeaturedCategories() {
   try {
     const response = await api.get("/categories/featured");
+    const data = response.data;
+
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function getOrder(id: string) {
+  try {
+    const response = await api.get(`/orders/${id}`);
     const data = response.data;
 
     return data;
