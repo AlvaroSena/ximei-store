@@ -1,8 +1,9 @@
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useContext, useEffect, useState } from "react";
 import { ShoppingCartContext } from "../contexts/shopping-cart-context";
-import type { CartItem as CartItemType } from "../types/cart-item";
 import { CartItem } from "./cart-item";
+import { LoaderCircle } from "lucide-react";
+import type { CartItem as CartItemType } from "../types/cart-item";
 
 type CartDrawerProps = {
   isOpen: boolean;
@@ -10,6 +11,7 @@ type CartDrawerProps = {
 };
 
 export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
+  const [isSendingOrder, setIsSendingOrder] = useState(false);
   const { cart, finalizeOrder } = useContext(ShoppingCartContext);
   const [cartData, setCartData] = useState<any>([]);
   let total = 0;
@@ -21,6 +23,15 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   useEffect(() => {
     setCartData(cart);
   }, [cart]);
+
+  async function submitOrder() {
+    setIsSendingOrder(true);
+
+    setTimeout(async () => {
+      await finalizeOrder();
+      setIsSendingOrder(false);
+    }, 1500);
+  }
 
   return (
     <div
@@ -89,10 +100,17 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               </button> */}
 
                 <button
-                  onClick={() => finalizeOrder()}
-                  className="w-full bg-red-900 text-white text-lg py-4 px-6 font-medium transition hover:opacity-90"
+                  onClick={submitOrder}
+                  className="w-full flex flex-row items-center justify-center gap-2 bg-red-900 text-white text-lg py-4 px-6 font-medium transition hover:opacity-90"
                 >
-                  FINALIZAR
+                  {isSendingOrder ? (
+                    <>
+                      <LoaderCircle className="animate-spin text-white" />
+                      FINALIZANDO...
+                    </>
+                  ) : (
+                    "FINALIZAR"
+                  )}
                 </button>
               </div>
             </footer>

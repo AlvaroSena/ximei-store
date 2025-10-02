@@ -11,7 +11,7 @@ interface ShoppingCartContextProps {
   addToCart: (item: CartItem) => any;
   deleteFromCart: (itemIndex: number) => void;
   cleanCart: () => void;
-  finalizeOrder: () => void;
+  finalizeOrder: () => Promise<void>;
   cart: CartItem[];
 }
 
