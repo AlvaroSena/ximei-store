@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 import type { CartItem } from "../types/cart-item";
+import { api } from "../lib/api";
 
 interface ShoppingCartContextProviderProps {
   children?: ReactNode;
@@ -14,13 +15,9 @@ interface ShoppingCartContextProps {
   cart: CartItem[];
 }
 
-export const ShoppingCartContext = createContext(
-  {} as ShoppingCartContextProps
-);
+export const ShoppingCartContext = createContext({} as ShoppingCartContextProps);
 
-export function ShoppingCartContextProvider({
-  children,
-}: ShoppingCartContextProviderProps) {
+export function ShoppingCartContextProvider({ children }: ShoppingCartContextProviderProps) {
   const [cart, setCart] = useState<CartItem[]>(() => {
     const storedCart = localStorage.getItem("cart");
 
@@ -36,20 +33,18 @@ export function ShoppingCartContextProvider({
   }, [cart]);
 
   function addToCart(item: CartItem) {
-    const itemAlreadyExists = cart.find(
-      (cartItem: CartItem) => cartItem.productId === item.productId
-    );
+    const itemAlreadyExists = cart.find((cartItem: CartItem) => cartItem.productId === item.productId);
 
     if (itemAlreadyExists && itemAlreadyExists.variantId === item.variantId) {
       const itemAlreadyExistsIndex = cart.findIndex(
-        (cartItem: CartItem) =>
-          cartItem.productId === itemAlreadyExists.productId
+        (cartItem: CartItem) => cartItem.productId === itemAlreadyExists.productId,
       );
 
       cart.splice(itemAlreadyExistsIndex, 1);
       const newItem = itemAlreadyExists;
       newItem.quantity += item.quantity;
       newItem.totalPriceInCents += item.totalPriceInCents;
+      newItem.variantAttributesValues = [...newItem.variantAttributesValues, item.variantAttributesValues[0]];
 
       toast.success(`${newItem.title} foi adicionado ao carrinho`);
       return setCart([...cart, newItem]);
@@ -74,42 +69,44 @@ export function ShoppingCartContextProvider({
     setCart([]);
   }
 
-  function finalizeOrder() {
-    let message = "# *Meu Pedido:*\n\n";
+  async function finalizeOrder() {
+    try {
+      let total = cart.reduce((sum: number, item: CartItem) => sum + item.priceInCents * item.quantity, 0);
 
-    cart.map((cartItem: CartItem) => {
-      return (message += `${cartItem.quantity}x ${
-        cartItem.title
-      } - ${Intl.NumberFormat("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-      }).format(cartItem.priceInCents / 100)}\n`);
-    });
+      const response = await api.post("/orders", {
+        items: cart,
+        total,
+      });
 
-    let total = cart.reduce(
-      (sum: number, item: CartItem) => sum + item.priceInCents * item.quantity,
-      0
-    );
+      if (response && response.data) {
+        const data = response.data;
 
-    message += `\n-------------------------\n *Total:* R$ ${Intl.NumberFormat(
-      "pt-BR",
-      {
-        style: "currency",
-        currency: "BRL",
+        const lines: string[] = [];
+
+        const summaryUrl = `${import.meta.env.VITE_APP_URL}/orders/${data.orderId}`;
+
+        lines.push("🛒 Quero finalizar meu pedido");
+        lines.push("");
+        lines.push("Resumo do meu pedido (clique para ver todos os itens):");
+        lines.push(`👉 ${summaryUrl}`);
+        lines.push("");
+        lines.push("✅ Confira no link acima");
+        lines.push("✅ Não precisa me pedir o modelo, já está tudo no link");
+
+        const text = lines.join("\n");
+        const encoded = encodeURIComponent(text);
+
+        const phoneNumber = import.meta.env.VITE_PHONE_NUMBER;
+        const url = `https://wa.me/${phoneNumber}?text=${encoded}`;
+        window.open(url, "_blank");
       }
-    ).format(total / 100)}`;
-
-    const phoneNumber = import.meta.env.VITE_API_URL;
-    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-      message
-    )}`;
-    window.open(url, "_blank");
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
-    <ShoppingCartContext.Provider
-      value={{ addToCart, deleteFromCart, cleanCart, finalizeOrder, cart }}
-    >
+    <ShoppingCartContext.Provider value={{ addToCart, deleteFromCart, cleanCart, finalizeOrder, cart }}>
       {children}
     </ShoppingCartContext.Provider>
   );

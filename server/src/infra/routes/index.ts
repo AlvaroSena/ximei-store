@@ -18,6 +18,8 @@ import { UpdateProductVariantController } from "../controllers/update-product-va
 import { DeleteProductVariantController } from "../controllers/delete-product-variant-controller";
 import { ListFeaturedCategoriesController } from "../controllers/list-featured-categories-controller";
 import { ListProductsByCategoryController } from "../controllers/list-products-by-category-controller";
+import { CreateOrderController } from "../controllers/create-order-controller";
+import { GetOrderController } from "../controllers/get-order-controller";
 
 export const routes = Router();
 
@@ -44,6 +46,9 @@ const deleteProductVariantController = new DeleteProductVariantController();
 
 const createVariantAttributes = new CreateVariantAttributesController();
 
+const createOrderController = new CreateOrderController();
+const getOrderController = new GetOrderController();
+
 routes.post("/v1/categories", createCategoryController.handle);
 routes.get("/v1/categories", listCategoriesController.handle);
 routes.get("/v1/categories/featured", listFeaturedCategoriesController.handle);
@@ -58,23 +63,13 @@ routes.get("/v1/products/:id", getProductController.handle);
 routes.delete("/v1/products/delete/:id", deleteProductController.handle);
 routes.get("/v1/products/q/:slug", getProductBySlugController.handle);
 routes.get("/v1/products/search/filter", searchProductController.handle);
-routes.get(
-  "/v1/products/categories/:categorySlug",
-  listProductsByCategoryController.handle
-);
+routes.get("/v1/products/categories/:categorySlug", listProductsByCategoryController.handle);
 
-routes.post(
-  "/v1/variants/product/:productId",
-  createProductVariantsController.handle
-);
-routes.get(
-  "/v1/variants/product/:productId",
-  listProductVariantsController.handle
-);
+routes.post("/v1/variants/product/:productId", createProductVariantsController.handle);
+routes.get("/v1/variants/product/:productId", listProductVariantsController.handle);
 routes.put("/v1/variants/update/:id", updateVariantController.handle);
 routes.delete("/v1/variants/delete/:id", deleteProductVariantController.handle);
 
-routes.post(
-  "/v1/variants-attributes/variant/:variantId",
-  createVariantAttributes.handle
-);
+routes.post("/v1/variants-attributes/variant/:variantId", createVariantAttributes.handle);
+routes.post("/v1/orders", createOrderController.handle);
+routes.get("/v1/orders/:id", getOrderController.handle);

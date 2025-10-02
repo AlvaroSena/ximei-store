@@ -1,10 +1,6 @@
 import React, { useState, useContext } from "react";
 import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
-import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-} from "@headlessui/react";
+import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react";
 import { QuantityInput } from "../components/quantity-input";
 import { ShoppingCartContext } from "../contexts/shopping-cart-context";
 import { useLocation, useSearchParams } from "react-router-dom";
@@ -20,10 +16,7 @@ interface ProductTemplateProps {
   variantParam?: string;
 }
 
-export function ProductTemplate({
-  product,
-  currentVariant,
-}: ProductTemplateProps) {
+export function ProductTemplate({ product, currentVariant }: ProductTemplateProps) {
   const { addToCart } = useContext(ShoppingCartContext);
   const [searchParams, setSearchParams] = useSearchParams();
   const [variantNotSelected, setVariantNotSelected] = useState(false);
@@ -52,29 +45,32 @@ export function ProductTemplate({
     }
 
     if (
-      (currentVariant &&
-        currentVariant.attributes.length >= 1 &&
-        queryParams.length <= 1) ||
-      (currentVariant &&
-        currentVariant.attributes.length > 1 &&
-        queryParams.length <= 2)
+      (currentVariant && currentVariant.attributes.length >= 1 && queryParams.length <= 1) ||
+      (currentVariant && currentVariant.attributes.length > 1 && queryParams.length <= 2)
     ) {
       setSizeNotSelected(true);
       return;
     }
 
+    const firstSize = queryParams[1].split("=")[1];
+    const secondSize = queryParams.length === 3 ? queryParams[2].split("=")[1] : null;
+
     const cartItem = {
       productId: product.id,
       imageUrl: currentVariant?.imageUrl ?? product.imageUrls[0],
-      title: currentVariant?.title
-        ? `${product.title} (${currentVariant.title})`
-        : product.title,
+      title: currentVariant?.title ? currentVariant.title : product.title,
       slug: currentVariant?.slug ?? product.slug,
       priceInCents: currentVariant?.priceInCents ?? product.priceInCents,
       quantity,
-      totalPriceInCents:
-        currentVariant?.priceInCents ?? product.priceInCents * quantity,
+      totalPriceInCents: currentVariant?.priceInCents ?? product.priceInCents * quantity,
       variantId: currentVariant?.id ?? null,
+      variantAttributesValues: [
+        {
+          quantity,
+          firstSize,
+          secondSize,
+        },
+      ],
     };
 
     addToCart(cartItem);
@@ -101,12 +97,7 @@ export function ProductTemplate({
 
             return (
               <Zoom>
-                <img
-                  key={index}
-                  src={url}
-                  alt={product.title}
-                  className="size-32 object-cover"
-                />
+                <img key={index} src={url} alt={product.title} className="size-32 object-cover" />
               </Zoom>
             );
           })}
@@ -125,7 +116,7 @@ export function ProductTemplate({
             }).format(
               currentVariant && currentVariant?.basePriceInCents
                 ? (currentVariant.basePriceInCents / 100) * 2
-                : product.priceInCents / 100
+                : product.priceInCents / 100,
             )}
           </span>
         )}
@@ -133,11 +124,7 @@ export function ProductTemplate({
           {Intl.NumberFormat("pt-BR", {
             style: "currency",
             currency: "BRL",
-          }).format(
-            currentVariant?.priceInCents
-              ? currentVariant?.priceInCents / 100
-              : product.priceInCents / 100
-          )}
+          }).format(currentVariant?.priceInCents ? currentVariant?.priceInCents / 100 : product.priceInCents / 100)}
         </span>
 
         <div className="flex flex-row items-center gap-3">
@@ -155,10 +142,7 @@ export function ProductTemplate({
                 key={variant.id}
                 className={`px-4 py-3 rounded-md text-stone-900 font-medium relative hover:outline outline-stone-300 ${
                   variantNotSelected && "border border-red-500"
-                } ${
-                  currentVariant?.slug === variant.slug &&
-                  "bg-stone-100 outline-none"
-                }`}
+                } ${currentVariant?.slug === variant.slug && "bg-stone-100 outline-none"}`}
                 onClick={() => {
                   setSearchParams({
                     variant: variant.slug,
@@ -180,64 +164,47 @@ export function ProductTemplate({
           })}
         </div>
 
-        {variantNotSelected && (
-          <span className="block text-red-500 text-sm">*Selecione uma cor</span>
-        )}
+        {variantNotSelected && <span className="block text-red-500 text-sm">*Selecione uma cor</span>}
 
-        {currentVariant?.attributes &&
-          currentVariant?.attributes?.length >= 1 && (
-            <div>
-              {currentVariant?.attributes.map((attribute: VariantAttribute) => {
-                return (
-                  <div className="flex flex-col gap-4">
-                    <p className="">{attribute.attributeName}</p>
-                    <div className="flex flex-row items-center gap-3 mb-3">
-                      {attribute.attributeValues.map((value, index: number) => {
-                        return (
-                          <button
-                            key={index}
-                            className={`px-3.5 py-2 border ${
-                              sizeNotSelected
-                                ? "border-red-500"
-                                : "border-neutral-200"
-                            }  transition hover:bg-neutral-100
+        {currentVariant?.attributes && currentVariant?.attributes?.length >= 1 && (
+          <div>
+            {currentVariant?.attributes.map((attribute: VariantAttribute) => {
+              return (
+                <div className="flex flex-col gap-4">
+                  <p className="">{attribute.attributeName}</p>
+                  <div className="flex flex-row items-center gap-3 mb-3">
+                    {attribute.attributeValues.map((value, index: number) => {
+                      return (
+                        <button
+                          key={index}
+                          className={`px-3.5 py-2 border ${
+                            sizeNotSelected ? "border-red-500" : "border-neutral-200"
+                          }  transition hover:bg-neutral-100
                             ${
-                              location.search.includes(
-                                `${attribute.id}=${value}`
-                              ) &&
+                              location.search.includes(`${attribute.id}=${value}`) &&
                               "bg-red-900 text-white border-none hover:bg-red-900"
                             }`}
-                            onClick={() => {
-                              const updatedParams = new URLSearchParams(
-                                searchParams
-                              );
-                              updatedParams.set(`size-${attribute.id}`, value);
-                              setSearchParams(updatedParams);
-                              setSizeNotSelected(false);
-                            }}
-                          >
-                            {value}
-                          </button>
-                        );
-                      })}
-                    </div>
+                          onClick={() => {
+                            const updatedParams = new URLSearchParams(searchParams);
+                            updatedParams.set(`size-${attribute.id}`, value);
+                            setSearchParams(updatedParams);
+                            setSizeNotSelected(false);
+                          }}
+                        >
+                          {value}
+                        </button>
+                      );
+                    })}
                   </div>
-                );
-              })}
-              {sizeNotSelected && (
-                <span className="block text-red-500 text-sm py-4">
-                  *Selecione um tamanho
-                </span>
-              )}
-            </div>
-          )}
+                </div>
+              );
+            })}
+            {sizeNotSelected && <span className="block text-red-500 text-sm py-4">*Selecione um tamanho</span>}
+          </div>
+        )}
 
         {currentVariant?.isAnOffer === false && (
-          <QuantityInput
-            quantity={quantity}
-            increaseQuantity={increaseQuantity}
-            decreaseQuantity={decreaseQuantity}
-          />
+          <QuantityInput quantity={quantity} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} />
         )}
 
         <button
@@ -248,9 +215,7 @@ export function ProductTemplate({
         </button>
 
         <div className="w-full flex flex-col items-center gap-3">
-          <span className="text-sm text-neutral-900">
-            Só aceitamos Pix como forma de pagamento
-          </span>
+          <span className="text-sm text-neutral-900">Só aceitamos Pix como forma de pagamento</span>
           <PixIcon />
         </div>
 
@@ -272,17 +237,13 @@ export function ProductTemplate({
                   <PlusIcon
                     className="size-5 text-stone-900 transition hover:opacity-50"
                     style={{
-                      animation: open
-                        ? "bottom-spin 0.3s forwards"
-                        : "bottom-spin-reverse 0.3s forwards",
+                      animation: open ? "bottom-spin 0.3s forwards" : "bottom-spin-reverse 0.3s forwards",
                     }}
                   />
                 )}
               </DisclosureButton>
               {open && (
-                <DisclosurePanel className="text-stone-700 font-medium text-lg">
-                  {product.description}
-                </DisclosurePanel>
+                <DisclosurePanel className="text-stone-700 font-medium text-lg">{product.description}</DisclosurePanel>
               )}
             </React.Fragment>
           )}
